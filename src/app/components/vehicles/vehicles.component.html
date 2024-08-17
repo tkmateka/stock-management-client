@@ -1,0 +1,11 @@
+<div class="flex column gap-1em">
+    <div class="flex spacebetween-center">
+        <div>
+            <h2 class="no-margin">All Vehicles</h2>
+        </div>
+    </div>
+
+    <div *ngIf="vehicles$ | async as vehicles">
+        <app-vehicle-table [vehicles]="vehicles?.vehicles"></app-vehicle-table>
+    </div>
+</div>

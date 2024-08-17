@@ -34,13 +34,10 @@ export class TokenService implements HttpInterceptor {
       switchMap((data: any) => {
         data['refreshToken'] = token.token;
         this.tokenService.setItem('tokens', data);
-        console.log('REFRESHED TOKEN!!!', data);
 
         return next.handle(this.addTokenHeader(req, data.accessToken));
       }),
       catchError(err => {
-        console.log('INTERCEPT ERROR!!!', err, token);
-        
         this.tokenService.logout();
         return throwError(err);
       })

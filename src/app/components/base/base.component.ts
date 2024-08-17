@@ -13,8 +13,8 @@ export class BaseComponent implements OnInit {
   userInfo: any = null;
   focusedNavItem: number = 0;
   navItems: any[] = [
-    { name: "Dashboard", icon: 'dashboard', url: '/home/dashboard' },
-    { name: "Vehicles", icon: 'garage', url: '/home/vehicles' },
+    { name: "Dashboard", icon: 'dashboard', url: '/base/dashboard' },
+    { name: "Vehicles", icon: 'garage', url: '/base/vehicles' },
   ];
 
   searchControl = new FormControl('');

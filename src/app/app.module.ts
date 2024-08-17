@@ -13,6 +13,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
 import { BarComponent } from './components/charts/bar/bar.component';
 import { VehicleTableComponent } from './components/vehicle-table/vehicle-table.component';
+import { VehiclesComponent } from './components/vehicles/vehicles.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { VehicleTableComponent } from './components/vehicle-table/vehicle-table.
     BaseComponent,
     DashboardComponent,
     BarComponent,
-    VehicleTableComponent
+    VehicleTableComponent,
+    VehiclesComponent
   ],
   imports: [
     BrowserModule,

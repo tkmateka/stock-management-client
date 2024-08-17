@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 interface ChartData {
@@ -15,7 +15,7 @@ interface ChartData {
 export class DashboardComponent {
   userInfo: any = null;
   dashboardData$!: Observable<any>;
-
+  dashboardSub!: Subscription;
   previousYears:ChartData = {
     labels: [],
     data: []
@@ -27,13 +27,13 @@ export class DashboardComponent {
     this.dashboardData$ = this.getDashboardData();
 
     // Remove after testing
-    this.dashboardData$.subscribe((data:any) => {
+    this.dashboardSub = this.dashboardData$.subscribe((data:any) => {
       data.previousYearsData.forEach((year:any) => {
         this.previousYears.labels.push(year.year);
         this.previousYears.data.push(year.carsAdded);
+        this.dashboardSub.unsubscribe();
       });
     })
-
   }
 
   getDashboardData(): Observable<any> {
