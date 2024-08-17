@@ -2,11 +2,11 @@
     <div class="flex column">
         <p class="main-logo no-margin">Stock<span class="accent">Xpert</span></p>
     </div>
-    <div class="flex spacebetween-center search-container">
-        <div class="flex column input-container remove-error-container remove-input-margin-top width-80">
+    <div class="flex start-center gap-1em search-container">
+        <div class="flex flex-1 column input-container remove-error-container remove-input-margin-top search-input">
             <mat-form-field appearance="outline">
-                <mat-icon matPrefix>search</mat-icon>
                 <input type="text" matInput [formControl]="searchControl" placeholder="Searchfor any vehicle...">
+                <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
         </div>
         <div class="flex center-center gap-1em">

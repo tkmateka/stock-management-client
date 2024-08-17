@@ -13,7 +13,7 @@ export class TokenService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
-
+    
     authReq = this.addTokenHeader(req, this.tokenService.getItem('tokens')?.accessToken);
 
     return next.handle(authReq).pipe(
@@ -30,12 +30,17 @@ export class TokenService implements HttpInterceptor {
   refreshToken(req: HttpRequest<any>, next: HttpHandler) {
     let token = { token: this.tokenService.getItem('tokens')?.refreshToken };
 
-    return this.api.post('refresh_token', token).pipe(
+    return this.api.post('/refresh_token', token).pipe(
       switchMap((data: any) => {
+        data['refreshToken'] = token.token;
         this.tokenService.setItem('tokens', data);
-        return next.handle(this.addTokenHeader(req, data.jwtToken));
+        console.log('REFRESHED TOKEN!!!', data);
+
+        return next.handle(this.addTokenHeader(req, data.accessToken));
       }),
       catchError(err => {
+        console.log('INTERCEPT ERROR!!!', err, token);
+        
         this.tokenService.logout();
         return throwError(err);
       })

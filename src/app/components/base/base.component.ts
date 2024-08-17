@@ -14,7 +14,7 @@ export class BaseComponent implements OnInit {
   focusedNavItem: number = 0;
   navItems: any[] = [
     { name: "Dashboard", icon: 'dashboard', url: '/home/dashboard' },
-    { name: "Vehicles", icon: 'account_balance', url: '/home/vehicles' },
+    { name: "Vehicles", icon: 'garage', url: '/home/vehicles' },
   ];
 
   searchControl = new FormControl('');
@@ -32,24 +32,21 @@ export class BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-    console.log(this.userInfo);
 
     const body = { page: 1, limit: 10, sort: 'dateCreated', order: 'asc', filter: '' };
 
     this.searchControl.valueChanges.pipe(
       debounceTime(300),  // Delay the search to avoid triggering on every keystroke
       distinctUntilChanged(),  // Ignore duplicate values
-      switchMap(query => this.api.post('/search_vehicles', {...body, search: query}))  // Fetch filtered data from the API
-    ).subscribe(
-      {
-        next: (data: any) => {
-          if (data) {
-            console.log('RESULTS',data)
-          }
-        },
-        error: err => console.log(err)
-      }
-    );
+      switchMap(query => this.api.post('/search_vehicles', { ...body, search: query }))  // Fetch filtered data from the API
+    ).subscribe({
+      next: (data: any) => {
+        if (data) {
+          console.log('RESULTS', data)
+        }
+      },
+      error: err => console.log(err)
+    });
   }
 
   changeRoute(url: string) {

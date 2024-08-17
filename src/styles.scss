@@ -19,7 +19,8 @@ body {
     cursor: pointer;
 }
 
-.focused-sidenav-item, .sidenav-item:hover {
+.focused-sidenav-item,
+.sidenav-item:hover {
     cursor: pointer;
     color: $accent !important;
     background-color: $accent-light;
@@ -45,7 +46,11 @@ body {
 }
 
 .full-width {
-    width: 100%;
+    width: 100% !important;
+}
+
+.width-50 {
+    width: 50%;
 }
 
 .width-80 {
@@ -60,6 +65,10 @@ body {
 // Margins
 .no-margin {
     margin: 0;
+}
+
+.no-margin-top {
+    margin-top: 0;
 }
 
 .margin-bottom-1em {

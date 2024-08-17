@@ -10,15 +10,15 @@ export class TokenService {
   constructor(private router: Router, private snackBar: MatSnackBar) { }
 
   setItem(item: string, value: any) {
-    return localStorage.setItem(item, JSON.stringify(value));
+    return sessionStorage.setItem(item, JSON.stringify(value));
   }
 
   getItem(item: string) {
-    return JSON.parse(localStorage.getItem(item) || '{}');
+    return JSON.parse(sessionStorage.getItem(item) || '{}');
   }
 
   removeItem(item: string) {
-    return localStorage.removeItem(item);
+    return sessionStorage.removeItem(item);
   }
 
   logout() {

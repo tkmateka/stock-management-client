@@ -1,0 +1,41 @@
+<div class="flex column gap-1em" *ngIf="dashboardData$ | async as dashboardData">
+    <div class="flex spacebetween-center">
+        <div>
+            <h2 class="no-margin">Hi, {{userInfo.firstName | titlecase}} {{userInfo.lastName | titlecase}}</h2>
+            <p class="no-margin">here's what's happenning with the vehicles today</p>
+        </div>
+    </div>
+
+    <div class="flex spacebetween-stretch gap-1em">
+        <mat-card class="padding-20px flex flex-1 column gap-1em">
+            <h3 class="no-margin">New Cars This Year</h3>
+            <p class="no-margin">{{dashboardData.newCarsThisYear}}</p>
+            <small>Percentage Change: <span [ngClass]="+dashboardData.thisYearPercentageChange >= 0 ? 'active' : 'inactive'">{{+dashboardData.thisYearPercentageChange}}%</span></small>
+        </mat-card>
+        <mat-card class="padding-20px flex flex-1 column gap-1em">
+            <h3 class="no-margin">Total Vehicles</h3>
+            <p class="no-margin">{{dashboardData.totalVehicles}}</p>
+            <small>Average Millage: <span class="pending">{{+dashboardData.averageMillage}}</span></small>
+        </mat-card>
+        <mat-card class="padding-20px flex flex-1 column gap-1em">
+            <h3 class="no-margin">Total Cost Price</h3>
+            <p class="no-margin">R{{dashboardData.totalCostPrice}}</p>
+            <small>Total Retail Price: <span class="active">R{{+dashboardData.totalRetailPrice}}</span></small>
+        </mat-card>
+    </div>
+
+    <div class="flex spacebetween-stretch gap-1em">
+        <div class="flex column width-50" *ngIf="previousYears.labels.length > 0">
+            <mat-card class="padding-20px">
+                <h3 class="no-margin-top">Cars Added In Previous Years</h3>
+                <app-bar [labels]="previousYears.labels" [data]="previousYears.data"></app-bar>
+            </mat-card>
+        </div>
+        <div class="flex column flex-1">
+            <mat-card class="padding-20px full-height">
+                <h3 class="no-margin-top">Recently Added Vehicles</h3>
+                <app-vehicle-table [recentVehicles]="dashboardData.recentVehicles"></app-vehicle-table>
+            </mat-card>
+        </div>
+    </div>
+</div>
