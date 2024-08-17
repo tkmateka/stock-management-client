@@ -4,10 +4,15 @@
 // Inputs container mixins
 // ==========================================================================================================================================================================
 .input-container, .text-area-container {
-    .mat-mdc-form-field-icon-suffix>.mat-icon {
+    .mat-mdc-form-field-icon-suffix>.mat-icon,
+    .mat-mdc-form-field-icon-prefix>.mat-icon {
         padding: 8px 8px 4px 0;
-        color: $primary-light;
+        color: $grey;
         cursor: pointer;
+    }
+
+    .mat-mdc-form-field-icon-prefix>.mat-icon {
+        padding: 0px 8px;
     }
 
     .mat-mdc-text-field-wrapper {
@@ -47,6 +52,12 @@
 .remove-error-container {
     .mat-mdc-form-field-subscript-wrapper {
         display: none;
+    }
+}
+
+.remove-input-margin-top {
+    .mat-mdc-text-field-wrapper {
+        margin-top: 0 !important;
     }
 }
 
