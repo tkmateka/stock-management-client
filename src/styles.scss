@@ -1,1 +1,73 @@
 /* You can add global styles to this file, and also import other style files */
+@import './flex.scss';
+@import './reset-defaults.scss';
+@import './colors.scss';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: ghostwhite;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.link:hover {
+    color: $accent;
+    cursor: pointer;
+}
+
+.focused-sidenav-item, .sidenav-item:hover {
+    cursor: pointer;
+    color: $accent !important;
+    background-color: $accent-light;
+}
+
+// Auth
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.auth-card {
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+// Size
+.full-height {
+    height: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+// Font
+.text-center {
+    text-align: center;
+}
+
+// Margins
+.no-margin {
+    margin: 0;
+}
+
+.margin-bottom-1em {
+    margin-bottom: 1em;
+}
+
+// Paddings
+.padding-20px {
+    padding: 20px;
+    box-sizing: border-box;
+}

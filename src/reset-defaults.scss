@@ -1,0 +1,105 @@
+@import './colors.scss';
+
+// ==========================================================================================================================================================================
+// Inputs container mixins
+// ==========================================================================================================================================================================
+.input-container, .text-area-container {
+    .mat-mdc-form-field-icon-suffix>.mat-icon {
+        padding: 8px 8px 4px 0;
+        color: $primary-light;
+        cursor: pointer;
+    }
+
+    .mat-mdc-text-field-wrapper {
+        height: 40px;
+        background: $white;
+        margin-top: 4px;
+        border-radius: 6px !important;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+        .mat-mdc-form-field-infix {
+            min-height: 6px;
+            width: unset;
+            height: 40px;
+        }
+
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+            border: none;
+        }
+
+        .mat-mdc-form-field-infix {
+            padding-top: 6px !important;
+        }
+
+        .mdc-text-field__input {
+            font-size: 14px;
+        }
+
+        .mdc-text-field__input::placeholder {
+            color: $grey;
+            font-size: 14px;
+        }
+    }
+}
+
+.remove-error-container {
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+}
+
+.text-area-container {
+    .mat-mdc-text-field-wrapper {
+        height: auto;
+    }
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix {
+        height: auto;
+    }
+}
+
+progress::-webkit-progress-value {
+    transition: width 0.1s ease;
+}
+
+// ==========================================================================================================================================================================
+// Pagination
+// ==========================================================================================================================================================================
+mat-paginator {
+    border-radius: 10px;
+
+    .mat-mdc-form-field-infix {
+        padding: 0 !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+        height: 30px;
+    }
+}
+
+// ==========================================================================================================================================================================
+// Scroll
+// ==========================================================================================================================================================================
+
+/* width */
+*::-webkit-scrollbar {
+    width: 7px;
+    height: 5px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+    background: $accent;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+    background: $primary;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background: $primary;
+}

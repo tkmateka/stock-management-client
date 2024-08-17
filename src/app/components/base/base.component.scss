@@ -1,0 +1,50 @@
+mat-toolbar {
+    height: 65px;
+    border-bottom: 1px solid;
+}
+
+.router-outlet {
+    padding: 20px;
+    box-sizing: border-box;
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+}
+
+.hideSideNav .mat-drawer-content {
+    margin-left: 0px !important;
+}
+
+.initials {
+    height: 45px;
+    width: 45px;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    p {
+        margin: 0;
+        font-size: 1.6em;
+    }
+}
+
+.main-logo {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.sidenav-container {
+    mat-sidenav {
+        width: 200px;
+        padding: 20px 15px;
+        box-sizing: border-box;
+
+        .sidenav-item {
+            height: 45px;
+            padding: 0 15px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            margin-bottom: 7px;
+        }
+    }
+}

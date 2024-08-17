@@ -1,0 +1,89 @@
+$primary: #3f51b5;
+$accent: #ff4081;
+$white: #ffffff;
+$black: #000000;
+$grey: #90A4AE;
+$primary-light: #5871ff;
+$accent-light: #fdebf1;
+$light-grey: #f4f4f4;
+$text-light-grey: #c8c8ce;
+
+$green: #00ab00;
+$blue: #00a4d0;
+$yellow: #f7f701;
+$green-light: #cbffcb;
+$orange: #cd8c00;
+$orange-light: #ffefcb;
+$red: #f44336;
+$red-light: #ffd3cb;
+
+$gradient: linear-gradient(45deg, $primary, transparent);
+
+// ==========================================================================================================================================================================
+// Colors
+// ==========================================================================================================================================================================
+.light-grey {
+    color: $text-light-grey;
+}
+
+.white {
+    color: $white !important;
+}
+
+.orange {
+    color: $orange !important;
+}
+
+.blue {
+    color: $blue !important;
+}
+
+.grey {
+    color: $grey !important;
+}
+
+.accent {
+    color: $accent !important;
+}
+
+.primary {
+    color: $primary !important;
+}
+
+.primary-bg {
+    background-color: $primary;
+}
+
+.light-grey-bg {
+    background-color: $light-grey;
+}
+
+.gradient-bg {
+    background: $gradient;
+}
+
+.light-primary-bg {
+    background: $primary-light;
+}
+
+.active, .pending, .inactive {
+    border: 1px solid;
+    border-radius: 6px;
+    height: 30px !important;
+    font-size: 10px;
+}
+
+.active {
+    background: $green-light;
+    color: $green;
+}
+
+.pending {
+    background: $orange-light;
+    color: $orange;
+}
+
+.inactive {
+    background: $red;
+    color: $red-light;
+}
