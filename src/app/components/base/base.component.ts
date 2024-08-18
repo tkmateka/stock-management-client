@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { FormControl, UntypedFormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, Subscription, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -10,6 +10,10 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./base.component.scss']
 })
 export class BaseComponent implements OnInit {
+  vehicles!: any;
+  vehicleSub!: Subscription;
+  showSearchResults:boolean = false;
+
   userInfo: any = null;
   focusedNavItem: number = 0;
   navItems: any[] = [
@@ -35,18 +39,25 @@ export class BaseComponent implements OnInit {
 
     const body = { page: 1, limit: 10, sort: 'dateCreated', order: 'asc', filter: '' };
 
-    this.searchControl.valueChanges.pipe(
+    this.vehicleSub = this.searchControl.valueChanges.pipe(
       debounceTime(300),  // Delay the search to avoid triggering on every keystroke
       distinctUntilChanged(),  // Ignore duplicate values
       switchMap(query => this.api.post('/search_vehicles', { ...body, search: query }))  // Fetch filtered data from the API
     ).subscribe({
       next: (data: any) => {
         if (data) {
-          console.log('RESULTS', data)
+          this.vehicles = data;
+          this.showSearchResults = data.total > 0;
+          this.vehicleSub.unsubscribe();
         }
       },
       error: err => console.log(err)
     });
+  }
+
+  back() {
+    this.searchControl.setValue('');
+    this.showSearchResults = false;
   }
 
   changeRoute(url: string) {

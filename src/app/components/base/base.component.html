@@ -31,7 +31,19 @@
 
     <mat-sidenav-content>
         <div class="router-outlet">
-            <router-outlet></router-outlet>
+            <router-outlet *ngIf="!showSearchResults"></router-outlet>
+            <div *ngIf="showSearchResults">
+                <div class="flex spacebetween-center">
+                    <h2>Search results for: <span class="accent">{{searchControl.value}}</span></h2>
+                    <button mat-raised-button color="primary" (click)="back()">Back</button>
+                </div>
+
+                <mat-card class="flex column no-padding-bottom">
+                    <div class="table-container">
+                        <app-vehicle-table [vehicles]="vehicles?.vehicles"></app-vehicle-table>
+                    </div>
+                </mat-card>
+            </div>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

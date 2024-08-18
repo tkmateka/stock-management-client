@@ -8,7 +8,7 @@
             <div class="actions input-container remove-error-container width-200px flex flex-1 column">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-select [(ngModel)]="paginationConfig.sort" placeholder="Sort By">
-                        <mat-option [value]="option" *ngFor="let option of sortOptions">
+                        <mat-option [value]="option" *ngFor="let option of sortOptions" (click)="updateTable()">
                             Sort: {{ option }}
                         </mat-option>
                     </mat-select>
@@ -17,7 +17,7 @@
             <div class="actions input-container remove-error-container width-110px flex flex-1 column">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-select [(ngModel)]="paginationConfig.order" placeholder="Order By">
-                        <mat-option [value]="option" *ngFor="let option of orderOptions">
+                        <mat-option [value]="option" *ngFor="let option of orderOptions" (click)="updateTable()">
                             Order: {{ option }}
                         </mat-option>
                     </mat-select>
