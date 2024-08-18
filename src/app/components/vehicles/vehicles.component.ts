@@ -36,18 +36,20 @@ export class VehiclesComponent {
   }
 
   addNewVehicle(e: string) {
-    const dialogRef = this.dialog.open(AddVehicleComponent);
+    const dialogRef = this.dialog.open(AddVehicleComponent, {
+      hasBackdrop: false
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-
-      this.vehicleSub = this.api.post('/add_vehicle', result).subscribe({
-        next: (res:any) => {
-          this.snackbar.open(res.message, 'Ok');
-          this.vehicles$ = this.getDashboardData();
-        },
-        error: (err:any) => console.log(err),
-      });
+      if (result) {
+        this.vehicleSub = this.api.post('/add_vehicle', result).subscribe({
+          next: (res: any) => {
+            this.snackbar.open(res.message, 'Ok', { duration: 3000 });
+            this.vehicles$ = this.getDashboardData();
+          },
+          error: (err: any) => this.snackbar.open(err.error),
+        });
+      }
     });
   }
 
@@ -56,7 +58,7 @@ export class VehiclesComponent {
   }
 
   ngOnDestroy() {
-    if(this.vehicleSub) {
+    if (this.vehicleSub) {
       this.vehicleSub.unsubscribe();
     }
   }

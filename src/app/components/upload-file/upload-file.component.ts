@@ -33,7 +33,7 @@ export class UploadFileComponent {
 
     // Check if the number of files exceeds 3
     if (input.files.length > 3) {
-      this.snackbar.open('You can only upload a maximum of 3 files.', 'Ok');
+      this.snackbar.open('You can only upload a maximum of 3 files.', 'Ok', {duration: 3000});
       input.value = ''; // Clear the file input
       return;
     }
@@ -45,7 +45,7 @@ export class UploadFileComponent {
       // Check if file size exceeds the maximum limit
       if (fileSizeMB > this.maxSizeMB) {
         filenames = [];
-        this.snackbar.open(`File size exceeds the maximum limit of ${this.maxSizeMB} MB.`, 'Ok');
+        this.snackbar.open(`File size exceeds the maximum limit of ${this.maxSizeMB} MB.`, 'Ok', {duration: 3000});
         return;
       }
     }

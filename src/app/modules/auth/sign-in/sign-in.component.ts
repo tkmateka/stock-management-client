@@ -35,7 +35,7 @@ export class SignInComponent implements OnDestroy {
             this.getUserInfo();
           }
         },
-        error: err => this.snackBar.open(err.error, 'Ok')
+        error: err => this.snackBar.open(err.error, 'Ok', {duration: 3000})
       });
   }
 
@@ -48,7 +48,7 @@ export class SignInComponent implements OnDestroy {
             this.router.navigate(['base']);
           }
         },
-        error: err => this.snackBar.open(err.error, 'Ok')
+        error: err => this.snackBar.open(err.error, 'Ok', {duration: 3000})
       })
   }
 

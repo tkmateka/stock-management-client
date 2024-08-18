@@ -23,4 +23,10 @@ export class ApiService {
     }
     return this.http.get(url);
   }
+
+  delete(endpoint: string) {
+    let url = `${this.serverUrl}${endpoint}`;
+
+    return this.http.delete(url);
+  }
 }

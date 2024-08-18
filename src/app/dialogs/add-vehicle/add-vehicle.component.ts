@@ -1,13 +1,15 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment.development';
 
 interface Image {
   name: string,
-  path: string
+  path: string,
+  id: string
 }
 interface Accessory {
   name: string,
@@ -33,12 +35,14 @@ export class AddVehicleComponent implements OnDestroy {
     return year >= 1900 && year <= new Date().getFullYear();  // Allow years from 1900 to current
   };
 
-  constructor(public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder, private api: ApiService) {
+  constructor(
+    public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder,
+    private api: ApiService, private snackbar: MatSnackBar) {
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
       make: ['', Validators.required],
       model: ['', Validators.required],
-      modelYear: [0, [Validators.required, Validators.min(1900)]],  // Ensure valid year
+      modelYear: [new Date().getFullYear(), [Validators.required, Validators.min(1900)]],  // Ensure valid year
       millage: [null, [Validators.required, Validators.min(0)]],  // Positive millage
       colour: ['', Validators.required],
       vin: ['', Validators.required],
@@ -75,8 +79,15 @@ export class AddVehicleComponent implements OnDestroy {
   }
 
   // Remove image
-  removeImage(index: number): void {
-    this.images.removeAt(index);
+  removeImage(image: Image, index: number): void {
+    this.api.delete(`/file/${image.id}`)
+      .subscribe({
+        next: (response: any) => {
+          this.images.removeAt(index);
+          this.snackbar.open(response.message, 'Ok', { duration: 3000 })
+        },
+        error: (err: any) => console.log(err)
+      })
   }
 
   // Child Date Picker
@@ -98,7 +109,8 @@ export class AddVehicleComponent implements OnDestroy {
         for (const file of res['file']) {
           this.addImage({
             name: file.originalname,
-            path: `${this.serverUrl}/file/${file.filename}`
+            path: `${this.serverUrl}/file/${file.filename}`,
+            id: file['id']
           });
         }
       },
@@ -109,7 +121,20 @@ export class AddVehicleComponent implements OnDestroy {
   submit(): void {
     if (this.newVehicleForm.invalid) return;
 
+    if (this.images.length > 3) {
+      this.snackbar.open('The number of images must be 3 or fewer.', 'Ok', { duration: 3000 })
+      return;
+    }
+
     this.dialogRef.close(this.newVehicleForm.value);
+  }
+
+  cancel(): void {
+    this.images.value.forEach((image: Image, index: number) => {
+      this.removeImage(image, index);
+    });
+
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
