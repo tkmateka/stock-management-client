@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 
 export interface Vehicle {
   make: string,
@@ -18,13 +19,14 @@ export interface Vehicle {
 export class VehicleTableComponent implements OnChanges {
   @Input() vehicles: any;
 
+  enableActions: boolean = false;
+
   displayedColumns: string[] = ['image', 'make', 'model', 'modelYear', 'cost', 'millage'];
-  dataSource!: Vehicle[];
+  dataSource!: MatTableDataSource<Vehicle[]>;
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vehicles']) {
-      console.log(changes['vehicles'])
-      this.dataSource = changes['vehicles'].currentValue.map((row: any) => {
+      const data = changes['vehicles'].currentValue.map((row: any) => {
         return {
           make: row.make,
           cost: row.costPrice,
@@ -34,7 +36,13 @@ export class VehicleTableComponent implements OnChanges {
           model: row.model,
         }
       });
-      console.log(this.dataSource)
+
+      this.dataSource = new MatTableDataSource(data);
     }
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -26,6 +26,10 @@ body {
     background-color: $accent-light;
 }
 
+.actions .mat-mdc-select-value-text {
+    font-size: 12px;
+}
+
 // Auth
 .logo {
     position: absolute;

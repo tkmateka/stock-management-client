@@ -11,10 +11,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const components = [
   MatButtonModule, MatSnackBarModule, FormsModule, ReactiveFormsModule, MatInputModule,
-  MatCardModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatTooltipModule, MatTableModule
+  MatCardModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatTooltipModule,
+  MatTableModule, MatSelectModule, MatPaginatorModule
 ]
 
 @NgModule({

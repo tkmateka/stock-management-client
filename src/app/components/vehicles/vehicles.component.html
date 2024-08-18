@@ -3,9 +3,37 @@
         <div>
             <h2 class="no-margin">All Vehicles</h2>
         </div>
+
+        <div class="flex gap-1em">
+            <div class="actions input-container remove-error-container width-200px flex flex-1 column">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-select [(ngModel)]="paginationConfig.sort" placeholder="Sort By">
+                        <mat-option [value]="option" *ngFor="let option of sortOptions">
+                            Sort: {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="actions input-container remove-error-container width-110px flex flex-1 column">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-select [(ngModel)]="paginationConfig.order" placeholder="Order By">
+                        <mat-option [value]="option" *ngFor="let option of orderOptions">
+                            Order: {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
     </div>
 
     <div *ngIf="vehicles$ | async as vehicles">
-        <app-vehicle-table [vehicles]="vehicles?.vehicles"></app-vehicle-table>
+        <mat-card class="flex column no-padding-bottom">
+            <div class="table-container">
+                <app-vehicle-table [vehicles]="vehicles?.vehicles"></app-vehicle-table>
+            </div>
+            <mat-paginator [length]="vehicles?.total" [pageSize]="paginationConfig.limit" [pageIndex]="paginationConfig.page - 1"
+                [pageSizeOptions]="[2, 5, 10, 25, 100]" aria-label="Select page" (page)="handlePageEvent($event)">
+            </mat-paginator>
+        </mat-card>
     </div>
 </div>
