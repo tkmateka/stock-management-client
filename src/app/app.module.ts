@@ -17,6 +17,9 @@ import { VehiclesComponent } from './components/vehicles/vehicles.component';
 import { AddVehicleComponent } from './dialogs/add-vehicle/add-vehicle.component';
 import { YearPickerComponent } from './components/year-picker/year-picker.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { ViewVehicleComponent } from './dialogs/view-vehicle/view-vehicle.component';
+import { UpdateVehicleComponent } from './dialogs/update-vehicle/update-vehicle.component';
+import { ConfirmationComponent } from './dialogs/confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     AddVehicleComponent,
     YearPickerComponent,
     UploadFileComponent,
+    ViewVehicleComponent,
+    UpdateVehicleComponent,
+    ConfirmationComponent,
   ],
   imports: [
     BrowserModule,

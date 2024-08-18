@@ -1,5 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
+import { ConfirmationComponent } from 'src/app/dialogs/confirmation/confirmation.component';
+import { UpdateVehicleComponent } from 'src/app/dialogs/update-vehicle/update-vehicle.component';
+import { ApiService } from 'src/app/services/api.service';
 
 export interface Vehicle {
   make: string,
@@ -8,6 +13,7 @@ export interface Vehicle {
   modelYear: number,
   image: string,
   model: string,
+  actions: string;
 }
 
 
@@ -16,19 +22,27 @@ export interface Vehicle {
   templateUrl: './vehicle-table.component.html',
   styleUrls: ['./vehicle-table.component.scss']
 })
-export class VehicleTableComponent implements OnChanges {
+export class VehicleTableComponent implements OnChanges, OnDestroy {
   @Input() vehicles: any;
   @Input() showActions: boolean | undefined = false;
   @Output() addNewVehicle: EventEmitter<string> = new EventEmitter();
+  @Output() updateTable: EventEmitter<string> = new EventEmitter();
 
   enableActions: boolean = false;
-
-  displayedColumns: string[] = ['image', 'make', 'model', 'modelYear', 'cost', 'millage'];
+  vehiclesList: any[] = [];
+  displayedColumns: string[] = ['image', 'make', 'model', 'modelYear', 'cost', 'millage', 'actions'];
   dataSource!: MatTableDataSource<Vehicle[]>;
+
+  updateSub!: Subscription;
+  deleteSub!: Subscription;
+
+  constructor(public dialog: MatDialog, private api: ApiService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['vehicles']) {
-      const data = changes['vehicles'].currentValue.map((row: any) => {
+      this.vehiclesList = changes['vehicles'].currentValue;
+
+      const data: any = this.vehiclesList.map((row: any) => {
         return {
           make: row.make,
           cost: row.costPrice,
@@ -36,10 +50,9 @@ export class VehicleTableComponent implements OnChanges {
           modelYear: row.modelYear,
           image: row.images[0].path,
           model: row.model,
+          actions: ''
         }
       });
-
-      console.log(data);
 
       this.dataSource = new MatTableDataSource(data);
     }
@@ -52,5 +65,44 @@ export class VehicleTableComponent implements OnChanges {
 
   addVehicle() {
     this.addNewVehicle.emit('Add new Vehicle');
+  }
+
+  view(index: number) { }
+
+  update(index: number) {
+    const dialogRef = this.dialog.open(UpdateVehicleComponent, {
+      hasBackdrop: false,
+      data: this.vehiclesList[index],
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.updateSub = this.api.put(`/update_vehicle`, result).subscribe({
+          next: (res) => this.updateTable.emit(),
+          error: (err) => console.log(err)
+        })
+      }
+    });
+  }
+
+  delete(index: number) {
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      hasBackdrop: false,
+      data: `Are you sure you want to DELETE ${this.vehiclesList[index]['make']}?`,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.api.delete(`/delete_vehicle_by_id/${this.vehiclesList[index]['_id']}`).subscribe({
+          next: (res) => this.updateTable.emit(),
+          error: (err) => console.log(err)
+        })
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.updateSub?.unsubscribe();
+    this.deleteSub?.unsubscribe();
   }
 }

@@ -29,7 +29,7 @@
     <div *ngIf="vehicles$ | async as vehicles">
         <mat-card class="flex column no-padding-bottom">
             <div class="table-container">
-                <app-vehicle-table [vehicles]="vehicles?.vehicles" [showActions]="true" (addNewVehicle)="addNewVehicle($event)"></app-vehicle-table>
+                <app-vehicle-table [vehicles]="vehicles?.vehicles" [showActions]="true" (addNewVehicle)="addNewVehicle($event)" (updateTable)="updateTable()"></app-vehicle-table>
             </div>
             <mat-paginator [length]="vehicles?.total" [pageSize]="paginationConfig.limit" [pageIndex]="paginationConfig.page - 1"
                 [pageSizeOptions]="[2, 5, 10, 25, 100]" aria-label="Select page" (page)="handlePageEvent($event)">

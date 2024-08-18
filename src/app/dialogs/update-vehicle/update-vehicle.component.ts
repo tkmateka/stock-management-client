@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { Accessory } from 'src/app/interfaces/Accessory';
@@ -8,13 +8,12 @@ import { Image } from 'src/app/interfaces/Image';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment.development';
 
-
 @Component({
-  selector: 'app-add-vehicle',
-  templateUrl: './add-vehicle.component.html',
-  styleUrls: ['./add-vehicle.component.scss']
+  selector: 'app-update-vehicle',
+  templateUrl: './update-vehicle.component.html',
+  styleUrls: ['./update-vehicle.component.scss']
 })
-export class AddVehicleComponent implements OnDestroy {
+export class UpdateVehicleComponent {
   newVehicleForm;
   serverUrl: string = environment.serverUrl;
 
@@ -32,8 +31,10 @@ export class AddVehicleComponent implements OnDestroy {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder,
-    private api: ApiService, private snackbar: MatSnackBar) {
+    public dialogRef: MatDialogRef<UpdateVehicleComponent>, private fb: FormBuilder,
+    private api: ApiService, private snackbar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
       make: ['', Validators.required],
@@ -47,6 +48,46 @@ export class AddVehicleComponent implements OnDestroy {
       accessories: this.fb.array([]),  // Initialize empty FormArray for accessories
       images: this.fb.array([])  // Initialize empty FormArray for images
     });
+
+    console.log(data);
+
+    // Initialize the form with some data (could come from an API)
+    this.populateFormWithVehicleData(data);
+  }
+
+  // Populates the form with initial vehicle data
+  populateFormWithVehicleData(vehicleData: any): void {
+    this.newVehicleForm.patchValue({
+      regNo: vehicleData.regNo,
+      make: vehicleData.make,
+      model: vehicleData.model,
+      modelYear: vehicleData.modelYear,
+      millage: vehicleData.millage,
+      colour: vehicleData.colour,
+      vin: vehicleData.vin,
+      retailPrice: vehicleData.retailPrice,
+      costPrice: vehicleData.costPrice,
+    });
+
+    // Populate accessories if any
+    if (vehicleData.accessories) {
+      const accessoriesArray = this.newVehicleForm.get('accessories') as FormArray;
+      vehicleData.accessories.forEach((accessory: string) => {
+        accessoriesArray.push(this.fb.control(accessory));
+      });
+    }
+
+    // Populate images
+    if (vehicleData.images) {
+      const imagesArray = this.newVehicleForm.get('images') as FormArray;
+      vehicleData.images.forEach((image: any) => {
+        imagesArray.push(this.fb.group({
+          name: [image.name],
+          path: [image.path],
+          _id: [image['_id']]
+        }));
+      });
+    }
   }
 
   // Helper to access accessories FormArray
@@ -96,7 +137,7 @@ export class AddVehicleComponent implements OnDestroy {
     this.newFiles = Array.from(files);
     this.newFiles = this.filterExtraImages(this.newFiles);
 
-    if (this.newFiles.length < 1) {
+    if(this.newFiles.length < 1) {
       this.snackbar.open('The number of images must be 3 or fewer.', 'Ok', { duration: 3000 })
       return;
     }
@@ -111,13 +152,10 @@ export class AddVehicleComponent implements OnDestroy {
     this.uploadSub = this.api.post('/upload', formData).subscribe({
       next: (res: any) => {
         for (const file of res['file']) {
-
-          console.log(file)
-
           this.addImage({
             name: file.originalname,
             path: `${this.serverUrl}/file/${file.filename}`,
-            _id: file['id']
+            _id: file['_id']
           });
         }
       },
@@ -126,15 +164,16 @@ export class AddVehicleComponent implements OnDestroy {
   }
 
   filterExtraImages(newImages: any) {
+    const images: any[] = newImages;
     // Calculate how many items are needed to make this.images have 3 items
     const itemsNeeded = 3 - this.images.length;
 
     // If newImages has more items than needed, pop the extra ones from newImages
-    while (newImages.length > itemsNeeded) {
-      newImages.pop();
+    while (images.length > itemsNeeded) {
+      images.pop();
     }
 
-    return newImages;
+    return images;
   }
 
   submit(): void {

@@ -1,0 +1,12 @@
+<div class="flex column padding-20px card-height">
+    <p class="margin-bottom-1em text-center no-margin-top">{{data}}</p>
+
+    <div class="flex spacebetween-center gap-1em">
+        <div class="flex column flex-1">
+            <button mat-raised-button color="accent" (click)="submit(false)">No</button>
+        </div>
+        <div class="flex column flex-1">
+            <button mat-raised-button color="primary" (click)="submit(true)">Yes</button>
+        </div>
+    </div>
+</div>

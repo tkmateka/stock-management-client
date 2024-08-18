@@ -15,6 +15,10 @@ export class ApiService {
     return this.http.post(`${this.serverUrl}${endpoint}`, payload);
   }
 
+  put(endpoint: string, payload: any) {
+    return this.http.put(`${this.serverUrl}${endpoint}`, payload);
+  }
+
   get(endpoint: string, query: any = '') {
     let url = `${this.serverUrl}${endpoint}`;
 

@@ -27,12 +27,16 @@ export class VehiclesComponent {
 
   constructor(private api: ApiService, public dialog: MatDialog, private snackbar: MatSnackBar) {
     // Directly assign the observable returned by the API to the property
-    this.vehicles$ = this.getDashboardData();
+    this.updateTable();
   }
 
   handlePageEvent(e: PageEvent) {
     this.paginationConfig['page'] = e.pageIndex + 1;
-    this.vehicles$ = this.getDashboardData();
+    this.updateTable();
+  }
+
+  updateTable() {
+    this.vehicles$ = this.getVehicles();
   }
 
   addNewVehicle(e: string) {
@@ -45,7 +49,7 @@ export class VehiclesComponent {
         this.vehicleSub = this.api.post('/add_vehicle', result).subscribe({
           next: (res: any) => {
             this.snackbar.open(res.message, 'Ok', { duration: 3000 });
-            this.vehicles$ = this.getDashboardData();
+            this.updateTable();
           },
           error: (err: any) => this.snackbar.open(err.error),
         });
@@ -53,7 +57,7 @@ export class VehiclesComponent {
     });
   }
 
-  getDashboardData(): Observable<any> {
+  getVehicles(): Observable<any> {
     return this.api.post('/get_vehicles', this.paginationConfig);
   }
 

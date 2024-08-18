@@ -66,6 +66,9 @@
                         <mat-error *ngIf="newVehicleForm.get('vin')?.hasError('required')">
                             Vin is required
                         </mat-error>
+                        <mat-error *ngIf="newVehicleForm.get('vin')?.hasError('minlength')">
+                            Vin should not be less than 5 charectors.
+                        </mat-error>
                     </mat-form-field>
                 </div>
 

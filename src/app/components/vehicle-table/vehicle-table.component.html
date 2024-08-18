@@ -5,7 +5,7 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Filter table" #input>
             </mat-form-field>
         </div>
-        
+
         <div class="flex column">
             <button mat-raised-button color="primary" (click)="addVehicle()">Add new vehicle</button>
         </div>
@@ -20,37 +20,49 @@
                     <img [src]="element.image" alt="Image" class="avatar">
                 </td>
             </ng-container>
-    
+
             <!-- Name Column -->
             <ng-container matColumnDef="make">
                 <th mat-header-cell *matHeaderCellDef> Name </th>
                 <td mat-cell *matCellDef="let element"> {{element.make}} </td>
             </ng-container>
-    
+
             <!-- Model Column -->
             <ng-container matColumnDef="model">
                 <th mat-header-cell *matHeaderCellDef> Model </th>
                 <td mat-cell *matCellDef="let element"> {{element.model}} </td>
             </ng-container>
-    
+
             <!-- Model Year Column -->
             <ng-container matColumnDef="modelYear">
                 <th mat-header-cell *matHeaderCellDef> Model Year </th>
                 <td mat-cell *matCellDef="let element"> {{element.modelYear}} </td>
             </ng-container>
-    
+
             <!-- Millage Column -->
             <ng-container matColumnDef="millage">
                 <th mat-header-cell *matHeaderCellDef> Millage </th>
                 <td mat-cell *matCellDef="let element"> {{element.millage}}KM </td>
             </ng-container>
-    
+
             <!-- Cost Column -->
             <ng-container matColumnDef="cost">
                 <th mat-header-cell *matHeaderCellDef> Cost </th>
                 <td mat-cell *matCellDef="let element"> R{{element.cost}} </td>
             </ng-container>
-    
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                    <div class="flex gap-1em">
+                        <mat-icon class="material-symbols-outlined pointer" color="primary" matTooltip="View" (click)="view(i)">visibility</mat-icon>
+                        <mat-icon class="material-symbols-outlined pointer" color="accent" matTooltip="Edit" (click)="update(i)">edit</mat-icon>
+                        <mat-icon class="material-symbols-outlined pointer" color="warn" matTooltip="Delete" (click)="delete(i)">delete</mat-icon>
+                    </div>
+                </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>

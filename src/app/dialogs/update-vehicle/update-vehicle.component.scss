@@ -1,0 +1,27 @@
+.input-container {
+    width: 32%;
+}
+
+.width-150px {
+    width: 150px;
+}
+
+.card-height {
+    max-height: 82vh;
+    overflow-y: auto;
+    max-width: 800px;
+}
+
+.uploaded-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 7px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    height: 30px;
+    width: 30px;
+}
