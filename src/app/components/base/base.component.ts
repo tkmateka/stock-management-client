@@ -1,7 +1,7 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { FormControl, UntypedFormControl } from '@angular/forms';
+import { Component, OnInit, HostBinding, OnChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Observable, Subscription, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ApiService } from 'src/app/services/api.service';
   templateUrl: './base.component.html',
   styleUrls: ['./base.component.scss']
 })
-export class BaseComponent implements OnInit {
+export class BaseComponent implements OnInit, OnChanges {
   vehicles!: any;
   vehicleSub!: Subscription;
   showSearchResults:boolean = false;
@@ -47,8 +47,11 @@ export class BaseComponent implements OnInit {
       next: (data: any) => {
         if (data) {
           this.vehicles = data;
-          this.showSearchResults = data.total > 0;
-          this.vehicleSub.unsubscribe();
+          this.showSearchResults = true;
+
+          if(!this.searchControl.value) {
+            this.showSearchResults = false;
+          }
         }
       },
       error: err => console.log(err)
@@ -67,5 +70,9 @@ export class BaseComponent implements OnInit {
         this.router.navigate([url]);
       }
     });
+  }
+
+  ngOnChanges() {
+    this.vehicleSub.unsubscribe();
   }
 }

@@ -39,8 +39,11 @@
                 </div>
 
                 <mat-card class="flex column no-padding-bottom">
-                    <div class="table-container">
+                    <div class="table-container" *ngIf="vehicles.total > 0">
                         <app-vehicle-table [vehicles]="vehicles?.vehicles"></app-vehicle-table>
+                    </div>
+                    <div class="table-container" *ngIf="vehicles.total < 1">
+                        <p>No results found for: <span class="warn">{{searchControl.value}}</span></p>
                     </div>
                 </mat-card>
             </div>
