@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { ConfirmationComponent } from 'src/app/dialogs/confirmation/confirmation.component';
 import { UpdateVehicleComponent } from 'src/app/dialogs/update-vehicle/update-vehicle.component';
+import { ViewVehicleComponent } from 'src/app/dialogs/view-vehicle/view-vehicle.component';
 import { ApiService } from 'src/app/services/api.service';
 
 export interface Vehicle {
@@ -67,7 +68,12 @@ export class VehicleTableComponent implements OnChanges, OnDestroy {
     this.addNewVehicle.emit('Add new Vehicle');
   }
 
-  view(index: number) { }
+  view(index: number) { 
+    this.dialog.open(ViewVehicleComponent, {
+      width: '80vw',
+      data: this.vehiclesList[index],
+    });
+  }
 
   update(index: number) {
     const dialogRef = this.dialog.open(UpdateVehicleComponent, {

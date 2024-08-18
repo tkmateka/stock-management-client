@@ -1,1 +1,72 @@
-<p>view-vehicle works!</p>
+<div class="flex column">
+    <button mat-mini-fab color="warn" matTooltip="Close" class="close" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <h1 class="text-center">Vehicle Details</h1>
+
+    <div class="flex padding-20px no-padding-top view-container gap-2em">
+        <div class="flex column flex-1">
+            <div class="flex column full-width">
+                <img [src]="data.images[selectedImage].path" alt="Focused Image"
+                    class="full-width full-height image-radius">
+                <p class="text-center">{{data.images[selectedImage].name}}</p>
+            </div>
+            <div class="flex gap-1em">
+                <div class="flex column flex-1 relative pointer" *ngFor="let img of data.images; let i = index"
+                    (click)="selectedImage = i">
+                    <div class="image-item" [class.overlay]="i === selectedImage"></div>
+                    <img [src]="img.path" alt="Vehicle Image" class="full-width full-height image-radius">
+                </div>
+            </div>
+        </div>
+        <div class="flex column flex-1 gap-1em">
+            <h2 class="no-margin">{{data.make + ' ' + data.model + ' ' + data.modelYear | titlecase}}</h2>
+
+            <div class="flex column gap-7px">
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Date Added: </div>
+                    <div class="flex flex-1">{{data.dateCreated | date}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Cost Price: </div>
+                    <div class="flex flex-1">{{data.costPrice | currency:'R'}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Retail Price: </div>
+                    <div class="flex flex-1">{{data.retailPrice | currency:'R'}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Colour: </div>
+                    <div class="flex flex-1">{{data.colour | titlecase}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Millage: </div>
+                    <div class="flex flex-1">{{data.millage}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">VIN: </div>
+                    <div class="flex flex-1">{{data.vin | uppercase}}</div>
+                </div>
+                <div class="flex full-width gap-1em">
+                    <div class="flex flex-1">Registration Number: </div>
+                    <div class="flex flex-1">{{data.regNo | uppercase}}</div>
+                </div>
+            </div>
+
+            <!-- Accessories -->
+            <div class="flex column gap-7px">
+                <h3 class="no-margin">Accessories</h3>
+                <p class="no-margin grey" *ngIf="data.accessories.length < 1">No accessories</p>
+                <div class="flex wrap spacebetween-stretch" *ngIf="data.accessories.length > 0">
+                    <mat-card *ngFor="let acc of data.accessories">
+                        <div class="flex column gap-7px">
+                            <p class="no-margin">{{acc.name | titlecase}}</p>
+                            <p class="no-margin grey">{{acc.description | titlecase}}</p>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

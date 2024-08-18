@@ -49,8 +49,6 @@ export class UpdateVehicleComponent {
       images: this.fb.array([])  // Initialize empty FormArray for images
     });
 
-    console.log(data);
-
     // Initialize the form with some data (could come from an API)
     this.populateFormWithVehicleData(data);
   }
