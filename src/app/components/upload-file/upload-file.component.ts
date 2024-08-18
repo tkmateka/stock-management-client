@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./upload-file.component.scss']
 })
 export class UploadFileComponent {
-  @Output() emitUrl = new EventEmitter<any>();
+  @Output() emitFiles = new EventEmitter<any>();
 
   file = new FormControl('');
 
@@ -29,29 +29,28 @@ export class UploadFileComponent {
 
   uploadFile(event: Event) {
     const input: any = event.target as HTMLInputElement;
+    let filenames: string[] = [];
 
     // Check if the number of files exceeds 3
     if (input.files.length > 3) {
-      this.snackbar.open('You can only upload a maximum of 3 files.');
+      this.snackbar.open('You can only upload a maximum of 3 files.', 'Ok');
       input.value = ''; // Clear the file input
       return;
     }
 
     for (const file of input.files) {
       const fileSizeMB = this.bytesToMB(file.size);
+      filenames.push(file.name);
 
       // Check if file size exceeds the maximum limit
       if (fileSizeMB > this.maxSizeMB) {
+        filenames = [];
         this.snackbar.open(`File size exceeds the maximum limit of ${this.maxSizeMB} MB.`, 'Ok');
         return;
       }
     }
 
-    this.file.setValue('Testing');
-    console.log(this.file)
-  }
-
-  getFileDetails(event: any) {
-    this.emitUrl.emit(event);
+    this.file.setValue(filenames.join(', '));    
+    this.emitFiles.emit(input.files);
   }
 }

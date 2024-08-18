@@ -39,6 +39,8 @@ export class VehicleTableComponent implements OnChanges {
         }
       });
 
+      console.log(data);
+
       this.dataSource = new MatTableDataSource(data);
     }
   }

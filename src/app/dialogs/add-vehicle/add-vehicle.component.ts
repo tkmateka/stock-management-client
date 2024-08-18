@@ -1,14 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
+import { environment } from 'src/environments/environment.development';
 
+interface Image {
+  name: string,
+  path: string
+}
+interface Accessory {
+  name: string,
+  description: string
+}
 @Component({
   selector: 'app-add-vehicle',
   templateUrl: './add-vehicle.component.html',
   styleUrls: ['./add-vehicle.component.scss']
 })
-export class AddVehicleComponent {
+export class AddVehicleComponent implements OnDestroy {
   newVehicleForm;
+  serverUrl: string = environment.serverUrl;
+
+  uploadSub!: Subscription;
 
   // FormControl to bind the selected year
   yearControl = new FormControl();
@@ -19,15 +33,7 @@ export class AddVehicleComponent {
     return year >= 1900 && year <= new Date().getFullYear();  // Allow years from 1900 to current
   };
 
-  // tokenSubscription!: Subscription;
-  // userInfoSubscription!: Subscription;
-
-  //   {
-  //     "name": "watch-4.webp",
-  //     "path": "http://localhost:3000/api/file/cce0f8f93bd7a7e861226ceb67e09f4a.jpg"
-  // }
-
-  constructor(public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder) {
+  constructor(public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder, private api: ApiService) {
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
       make: ['', Validators.required],
@@ -54,8 +60,8 @@ export class AddVehicleComponent {
   }
 
   // Add a new accessory dynamically
-  addAccessory(): void {
-    this.accessories.push(this.fb.control(''));
+  addAccessory(accessory: Accessory = { name: '', description: '' }): void {
+    this.accessories.push(this.fb.control(accessory));
   }
 
   // Remove accessory
@@ -64,11 +70,8 @@ export class AddVehicleComponent {
   }
 
   // Add a new image dynamically
-  addImage(): void {
-    this.images.push(this.fb.group({
-      name: '',
-      path: ''
-    }));
+  addImage(image: Image): void {
+    this.images.push(this.fb.group(image));
   }
 
   // Remove image
@@ -82,13 +85,36 @@ export class AddVehicleComponent {
   }
 
   // File Upload
-  getFileDetails(event:any) {
-    console.log(event);
+  getFileDetails(files: FileList) {
+    const formData: FormData = new FormData();
+
+    // Loop through the FileList and append each file to FormData
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i], files[i].name);
+    }
+
+    this.uploadSub = this.api.post('/upload', formData).subscribe({
+      next: (res: any) => {
+        for (const file of res['file']) {
+          this.addImage({
+            name: file.originalname,
+            path: `${this.serverUrl}/file/${file.filename}`
+          });
+        }
+      },
+      error: err => console.log(err),
+    })
   }
 
   submit(): void {
     if (this.newVehicleForm.invalid) return;
 
-    this.dialogRef.close(this.newVehicleForm.value)
+    this.dialogRef.close(this.newVehicleForm.value);
+  }
+
+  ngOnDestroy() {
+    if (this.uploadSub) {
+      this.uploadSub.unsubscribe();
+    }
   }
 }
