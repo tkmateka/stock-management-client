@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 export interface Vehicle {
@@ -19,6 +19,7 @@ export interface Vehicle {
 export class VehicleTableComponent implements OnChanges {
   @Input() vehicles: any;
   @Input() showActions: boolean | undefined = false;
+  @Output() addNewVehicle: EventEmitter<string> = new EventEmitter();
 
   enableActions: boolean = false;
 
@@ -45,5 +46,9 @@ export class VehicleTableComponent implements OnChanges {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  addVehicle() {
+    this.addNewVehicle.emit('Add new Vehicle');
   }
 }

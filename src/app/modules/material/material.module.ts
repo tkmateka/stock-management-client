@@ -13,11 +13,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const components = [
   MatButtonModule, MatSnackBarModule, FormsModule, ReactiveFormsModule, MatInputModule,
   MatCardModule, MatToolbarModule, MatIconModule, MatSidenavModule, MatTooltipModule,
-  MatTableModule, MatSelectModule, MatPaginatorModule
+  MatTableModule, MatSelectModule, MatPaginatorModule, MatDialogModule, MatDatepickerModule,
+  MatNativeDateModule
 ]
 
 @NgModule({

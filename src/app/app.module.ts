@@ -14,6 +14,9 @@ import { NgChartsModule } from 'ng2-charts';
 import { BarComponent } from './components/charts/bar/bar.component';
 import { VehicleTableComponent } from './components/vehicle-table/vehicle-table.component';
 import { VehiclesComponent } from './components/vehicles/vehicles.component';
+import { AddVehicleComponent } from './dialogs/add-vehicle/add-vehicle.component';
+import { YearPickerComponent } from './components/year-picker/year-picker.component';
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { VehiclesComponent } from './components/vehicles/vehicles.component';
     DashboardComponent,
     BarComponent,
     VehicleTableComponent,
-    VehiclesComponent
+    VehiclesComponent,
+    AddVehicleComponent,
+    YearPickerComponent,
+    UploadFileComponent,
   ],
   imports: [
     BrowserModule,

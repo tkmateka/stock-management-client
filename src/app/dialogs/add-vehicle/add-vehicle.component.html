@@ -1,0 +1,133 @@
+<div class="flex column padding-20px">
+    <form [formGroup]="newVehicleForm">
+        <h2 class="margin-bottom-1em text-center">Add New Vehicle</h2>
+
+        <div class="flex spacebetween-center wrap">
+            <div class="flex column input-container">
+                <mat-label>Reg No</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="text" matInput formControlName="regNo" placeholder="Ex. TEST123 GP">
+                    <mat-error *ngIf="newVehicleForm.get('regNo')?.hasError('required')">
+                        Reg No Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Make</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="text" matInput formControlName="make" placeholder="BMW">
+                    <mat-error *ngIf="newVehicleForm.get('make')?.hasError('required')">
+                        Make is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Model</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="text" matInput formControlName="model" placeholder="X6">
+                    <mat-error *ngIf="newVehicleForm.get('model')?.hasError('required')">
+                        Model is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Model Year</mat-label>
+                <app-year-picker (yearSelected)="onYearSelected($event)"></app-year-picker>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Millage</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="number" matInput formControlName="millage" placeholder="239832">
+                    <mat-error *ngIf="newVehicleForm.get('millage')?.hasError('required')">
+                        Millage is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Colour</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="text" matInput formControlName="colour" placeholder="Blue">
+                    <mat-error *ngIf="newVehicleForm.get('colour')?.hasError('required')">
+                        Colour is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Vin</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="text" matInput formControlName="vin" placeholder="CJSJH287382782">
+                    <mat-error *ngIf="newVehicleForm.get('vin')?.hasError('required')">
+                        Vin is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Retail Price</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="number" matInput formControlName="retailPrice" placeholder="280000">
+                    <mat-error *ngIf="newVehicleForm.get('retailPrice')?.hasError('required')">
+                        Retail Price is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex column input-container">
+                <mat-label>Cost Price</mat-label>
+                <mat-form-field appearance="outline">
+                    <input type="number" matInput formControlName="costPrice" placeholder="BMW">
+                    <mat-error *ngIf="newVehicleForm.get('costPrice')?.hasError('required')">
+                        Cost Price is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        
+            <!-- File Upload -->
+            <div class="flex column input-container">
+                <mat-label>File upload</mat-label>
+                <app-upload-file (emitUrl)="getFileDetails($event)"></app-upload-file>
+            </div>
+        </div>
+
+        <div class="flex spacebetween-center gap-1em">
+            <div class="flex column flex-1">
+                <button mat-raised-button color="accent">Back</button>
+            </div>
+            <div class="flex column flex-1">
+                <button mat-raised-button color="primary" (click)="submit()">Sign In</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- 
+Accessories
+<label>Accessories</label>
+<div formArrayName="accessories">
+  <div *ngFor="let accessory of accessories.controls; let i = index">
+    <input [formControlName]="i" type="text">
+    <button type="button" (click)="removeAccessory(i)">Remove</button>
+  </div>
+  <button type="button" (click)="addAccessory()">Add Accessory</button>
+</div>
+
+Images
+<label>Images</label>
+<div formArrayName="images">
+  <div *ngFor="let image of images.controls; let i = index" [formGroupName]="i">
+    <label>Name</label>
+    <input formControlName="name" type="text">
+    <label>Path</label>
+    <input formControlName="path" type="text">
+    <button type="button" (click)="removeImage(i)">Remove</button>
+  </div>
+  <button type="button" (click)="addImage()">Add Image</button>
+</div> 
+-->

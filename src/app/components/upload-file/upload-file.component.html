@@ -1,0 +1,8 @@
+<div class="flex column input-container">
+    <mat-form-field appearance="outline">
+        <input type="text" matInput [formControl]="file" placeholder="Upload image" readonly (click)="triggerFileInput()">
+        <mat-icon matSuffix>cloud_upload</mat-icon>
+    </mat-form-field>
+
+    <input type="file" #uploadInput (change)="uploadFile($event)" accept="image/*" multiple hidden />
+</div>
