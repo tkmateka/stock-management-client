@@ -30,12 +30,17 @@ export class SignInComponent implements OnDestroy {
       .subscribe({
         next: (res: any) => {
           if (res) {
+            if (res.error) {
+              this.snackBar.open(res.error, "Ok", { duration: 3000 });
+              return;
+            }
+
             this.snackBar.open(res.message, "Ok", { duration: 3000 });
             this.token.setItem('tokens', res);
             this.getUserInfo();
           }
         },
-        error: err => this.snackBar.open(err.error, 'Ok', {duration: 3000})
+        error: err => this.snackBar.open(err.error, 'Ok', { duration: 3000 })
       });
   }
 
@@ -48,7 +53,7 @@ export class SignInComponent implements OnDestroy {
             this.router.navigate(['base']);
           }
         },
-        error: err => this.snackBar.open(err.error, 'Ok', {duration: 3000})
+        error: err => this.snackBar.open(err.error, 'Ok', { duration: 3000 })
       })
   }
 

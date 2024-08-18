@@ -12,7 +12,7 @@
                             <mat-label>First Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input type="text" matInput formControlName="firstName" placeholder="Joe">
-                                <mat-error *ngIf="signUpForm.get('personalDetails.firstName')?.hasError('required')">
+                                <mat-error *ngIf="signUpForm.get('firstName')?.hasError('required')">
                                     First Name is required
                                 </mat-error>
                             </mat-form-field>
@@ -22,7 +22,7 @@
                             <mat-label>Last Name</mat-label>
                             <mat-form-field appearance="outline">
                                 <input type="text" matInput formControlName="lastName" placeholder="Doe">
-                                <mat-error *ngIf="signUpForm.get('personalDetails.lastName')?.hasError('required')">
+                                <mat-error *ngIf="signUpForm.get('lastName')?.hasError('required')">
                                     Last Name is required
                                 </mat-error>
                             </mat-form-field>
@@ -33,7 +33,7 @@
                         <mat-label>Emaild Address</mat-label>
                         <mat-form-field appearance="outline">
                             <input type="text" matInput formControlName="email" placeholder="Ex. pat@example.com">
-                            <mat-error *ngIf="signUpForm.get('personalDetails.email')?.hasError('required')">
+                            <mat-error *ngIf="signUpForm.get('email')?.hasError('required')">
                                 Emaild Address is required
                             </mat-error>
                         </mat-form-field>
@@ -43,7 +43,7 @@
                         <mat-label>Password</mat-label>
                         <mat-form-field appearance="outline">
                             <input type="password" matInput formControlName="password" placeholder="*********">
-                            <mat-error *ngIf="signUpForm.get('personalDetails.password')?.hasError('required')">
+                            <mat-error *ngIf="signUpForm.get('password')?.hasError('required')">
                                 Password is required
                             </mat-error>
                         </mat-form-field>
@@ -54,19 +54,16 @@
                         <mat-form-field appearance="outline">
                             <input type="password" matInput formControlName="confirmPassword" placeholder="*********">
                             <mat-error
-                                *ngIf="signUpForm.get('personalDetails.confirmPassword')?.hasError('passwordMatch') && !signUpForm.get('personalDetails.confirmPassword')?.hasError('required')">
+                                *ngIf="signUpForm.get('confirmPassword')?.hasError('passwordMatch') && !signUpForm.get('confirmPassword')?.hasError('required')">
                                 Password doesn't match
                             </mat-error>
-                            <mat-error *ngIf="signUpForm.get('personalDetails.confirmPassword')?.hasError('required')">
+                            <mat-error *ngIf="signUpForm.get('confirmPassword')?.hasError('required')">
                                 Confirm Password is required
                             </mat-error>
                         </mat-form-field>
                     </div>
 
                     <div class="flex spacebetween-center gap-1em">
-                        <div class="flex column flex-1">
-                            <button mat-raised-button color="accent">Back</button>
-                        </div>
                         <div class="flex column flex-1">
                             <button mat-raised-button color="primary" (click)="submit()">Sign Up</button>
                         </div>
@@ -80,6 +77,6 @@
         </mat-card>
     </div>
     <div class="flex column flex-1 center-center">
-        <img src="../../../../assets/illustrations/auth.svg" alt="auth illustration">
+        <img src="../../../../assets/illustrations/auth.svg" alt="auth illustration" class="full-height">
     </div>
 </div>

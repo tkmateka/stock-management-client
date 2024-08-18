@@ -8,29 +8,29 @@
                     <h2 class="margin-bottom-1em">Sign In to your Account</h2>
     
                     <div class="flex column input-container">
-                        <mat-label>Emaild Address</mat-label>
+                        <mat-label>Email Address</mat-label>
                         <mat-form-field appearance="outline">
                             <input type="text" matInput formControlName="email" placeholder="Ex. pat@example.com">
-                            <mat-error *ngIf="signInForm.get('personalDetails.email')?.hasError('required')">
-                                Emaild Address is required
+                            <mat-error *ngIf="signInForm.get('email')?.hasError('required')">
+                                Email Address is required
                             </mat-error>
                         </mat-form-field>
                     </div>
     
-                    <div class="flex column input-container margin-bottom-1em">
+                    <div class="flex column input-container">
                         <mat-label>Password</mat-label>
                         <mat-form-field appearance="outline">
                             <input type="password" matInput formControlName="password" placeholder="*********">
-                            <mat-error *ngIf="signInForm.get('personalDetails.password')?.hasError('required')">
+                            <mat-error *ngIf="signInForm.get('password')?.hasError('required')">
                                 Password is required
                             </mat-error>
                         </mat-form-field>
                     </div>
+                    <div class="flex end-center margin-bottom-1em">
+                        <small class="link" routerLink="/auth/forgot-password">Forgot password?</small>
+                    </div>
     
                     <div class="flex spacebetween-center gap-1em">
-                        <div class="flex column flex-1">
-                            <button mat-raised-button color="accent">Back</button>
-                        </div>
                         <div class="flex column flex-1">
                             <button mat-raised-button color="primary" (click)="submit()">Sign In</button>
                         </div>
@@ -44,6 +44,6 @@
         </mat-card>
     </div>
     <div class="flex column flex-1 center-center">
-        <img src="../../../../assets/illustrations/auth.svg" alt="auth illustration">
+        <img src="../../../../assets/illustrations/auth.svg" alt="auth illustration" class="full-height">
     </div>
 </div>
