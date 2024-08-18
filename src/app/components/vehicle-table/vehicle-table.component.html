@@ -1,5 +1,5 @@
-<div class="flex column gap-1em padding-20px">
-    <div class="flex spacebetween-center">
+<div class="flex column gap-1em" [class.padding-20px]="showActions">
+    <div class="flex spacebetween-center" *ngIf="showActions">
         <div class="flex column input-container remove-error-container">
             <mat-form-field appearance="outline" class="width-300px">
                 <input matInput (keyup)="applyFilter($event)" placeholder="Filter table" #input>

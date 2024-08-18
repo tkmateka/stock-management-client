@@ -18,6 +18,7 @@ export interface Vehicle {
 })
 export class VehicleTableComponent implements OnChanges {
   @Input() vehicles: any;
+  @Input() showActions: boolean | undefined = false;
 
   enableActions: boolean = false;
 
