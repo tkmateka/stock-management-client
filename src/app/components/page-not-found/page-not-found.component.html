@@ -1,1 +1,13 @@
-<p>page-not-found works!</p>
+<mat-toolbar color="primary" class="flex spacebetween-center">
+    <div class="flex column">
+        <p class="main-logo no-margin">Stock<span class="accent">Xpert</span></p>
+    </div>
+</mat-toolbar>
+
+<div class="page-container flex center-center">
+    <div class="flex column gap-1em center-center">
+        <img src="../../../assets/illustrations/404.svg" alt="404 Image">
+        <p class="text-center">Sorry, Page not found!</p>
+        <button mat-raised-button color="primary" (click)="location.back()">Go Back</button>
+    </div>
+</div>

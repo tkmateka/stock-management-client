@@ -1,0 +1,19 @@
+mat-toolbar {
+    height: 65px;
+    border-bottom: 1px solid;
+}
+
+.page-container {
+    padding: 20px;
+    box-sizing: border-box;
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+
+    img {
+        width: 500px;
+    }
+
+    button {
+        width: 250px;
+    }
+}
