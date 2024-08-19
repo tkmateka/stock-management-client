@@ -3,7 +3,7 @@
         <div class="image">
             <app-upload-file [from]="'profile'" (emitFiles)="updateImage($event)"></app-upload-file>
             
-            <img [src]="userInfo.image.path || imagePlaceholder" alt="Profile Image">
+            <img [src]="userInfo.image?.path || imagePlaceholder" alt="Profile Image">
         </div>
         <h2>{{userInfo.firstName + ' ' + userInfo.lastName | titlecase}}</h2>
         <p class="no-margin-top">Date Joined: {{userInfo.dateCreated | date}}</p>
