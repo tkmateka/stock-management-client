@@ -8,8 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/base/dashboard', pathMatch: 'full' }, // redirect to `first-component`
-  { path: 'base', redirectTo: '/base/dashboard', pathMatch: 'full' }, // redirect to `first-component`
+  { path: '', redirectTo: '/auth/sign-in', pathMatch: 'full' }, // redirect to `first-component`
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth.module').then(module => module.AuthModule)
