@@ -70,8 +70,9 @@ export class UpdateVehicleComponent {
     // Populate accessories if any
     if (vehicleData.accessories) {
       const accessoriesArray = this.newVehicleForm.get('accessories') as FormArray;
-      vehicleData.accessories.forEach((accessory: string) => {
-        accessoriesArray.push(this.fb.control(accessory));
+      vehicleData.accessories.forEach((accessory: any) => {
+        console.log(accessory)
+        accessoriesArray.push(this.fb.group(accessory));
       });
     }
 
@@ -79,11 +80,7 @@ export class UpdateVehicleComponent {
     if (vehicleData.images) {
       const imagesArray = this.newVehicleForm.get('images') as FormArray;
       vehicleData.images.forEach((image: any) => {
-        imagesArray.push(this.fb.group({
-          name: [image.name],
-          path: [image.path],
-          _id: [image['_id']]
-        }));
+        imagesArray.push(this.fb.group(image));
       });
     }
   }
@@ -100,7 +97,7 @@ export class UpdateVehicleComponent {
 
   // Add a new accessory dynamically
   addAccessory(accessory: Accessory = { name: '', description: '' }): void {
-    this.accessories.push(this.fb.control(accessory));
+    this.accessories.push(this.fb.group(accessory));
   }
 
   // Remove accessory
@@ -135,7 +132,7 @@ export class UpdateVehicleComponent {
     this.newFiles = Array.from(files);
     this.newFiles = this.filterExtraImages(this.newFiles);
 
-    if(this.newFiles.length < 1) {
+    if (this.newFiles.length < 1) {
       this.snackbar.open('The number of images must be 3 or fewer.', 'Ok', { duration: 3000 })
       return;
     }

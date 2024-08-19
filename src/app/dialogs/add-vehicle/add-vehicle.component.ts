@@ -61,7 +61,7 @@ export class AddVehicleComponent implements OnDestroy {
 
   // Add a new accessory dynamically
   addAccessory(accessory: Accessory = { name: '', description: '' }): void {
-    this.accessories.push(this.fb.control(accessory));
+    this.accessories.push(this.fb.group(accessory));
   }
 
   // Remove accessory

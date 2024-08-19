@@ -105,7 +105,8 @@
 
                 <div class="flex gap-1em full-width start-center">
                     <mat-card *ngFor="let image of images.controls; let i = index">
-                        <button mat-mini-fab color="warn" class="close-btn" matTooltip="Delete image" (click)="removeImage(image.value, i)">
+                        <button mat-mini-fab color="warn" class="close-btn" matTooltip="Delete image"
+                            (click)="removeImage(image.value, i)">
                             <mat-icon>delete</mat-icon>
                         </button>
 
@@ -123,13 +124,15 @@
                     </div>
                 </div>
 
-                <div formArrayName="accessories" class="flex column gap-1em margin-bottom-1em">
-                    <div class="flex gap-1em input-container full-width start-center remove-error-container"
-                        *ngFor="let accessory of accessories.controls; let i = index" [formControlName]="i">
+                <div formArrayName="accessories" class="flex column gap-1em margin-bottom-2em">
+                    <div *ngFor="let accessory of accessories.controls; let i = index" [formGroupName]="i"
+                        class="flex gap-1em input-container full-width start-center remove-error-container">
+
                         <mat-label>Accessory {{i + 1}}</mat-label>
                         <mat-form-field appearance="outline" class="flex-1">
                             <input type="text" matInput formControlName="name" placeholder="Ex. Bluetooth">
                         </mat-form-field>
+
                         <mat-form-field appearance="outline" class="flex-1">
                             <input type="text" matInput formControlName="description" placeholder="Ex. description">
                         </mat-form-field>
@@ -137,6 +140,7 @@
                         <button mat-raised-button color="warn" (click)="removeAccessory(i)">Remove</button>
                     </div>
                 </div>
+
             </div>
         </div>
 
