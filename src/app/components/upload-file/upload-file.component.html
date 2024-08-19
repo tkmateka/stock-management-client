@@ -1,5 +1,9 @@
 <div class="flex column input-container remove-error-container">
-    <button mat-raised-button (click)="triggerFileInput()" color="primary">Upload Images</button>
+    <button mat-fab class="edit-btn pointer" (click)="triggerFileInput()" *ngIf="from === 'profile'">
+        <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-raised-button (click)="triggerFileInput()" color="primary" *ngIf="!from">Upload Images</button>
 
     <input type="file" #uploadInput (change)="uploadFile($event)" accept="image/*" multiple hidden />
 </div>

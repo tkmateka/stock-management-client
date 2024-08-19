@@ -21,8 +21,8 @@ export class TokenService {
     return sessionStorage.removeItem(item);
   }
 
-  logout() {
-    this.snackBar.open("Your session Expired", "Ok", { duration: 3000 });
+  logout(message: string = 'Your session Expired') {
+    this.snackBar.open(message, "Ok", { duration: 3000 });
     this.removeItem('tokens');
     sessionStorage.clear();
     this.router.navigate(['auth/sign-in']);

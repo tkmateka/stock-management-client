@@ -1,3 +1,11 @@
 <div class="flex center-center full-height">
-    <p>profile still under construction!</p>
+    <mat-card class="padding-20px profile flex center-center">
+        <div class="image">
+            <app-upload-file [from]="'profile'" (emitFiles)="updateImage($event)"></app-upload-file>
+            
+            <img [src]="userInfo.image.path || imagePlaceholder" alt="Profile Image">
+        </div>
+        <h2>{{userInfo.firstName + ' ' + userInfo.lastName | titlecase}}</h2>
+        <p class="no-margin-top">Date Joined: {{userInfo.dateCreated | date}}</p>
+    </mat-card>
 </div>

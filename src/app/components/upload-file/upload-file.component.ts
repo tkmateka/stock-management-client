@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./upload-file.component.scss']
 })
 export class UploadFileComponent {
+  @Input() from: string | undefined;
   @Output() emitFiles = new EventEmitter<any>();
 
   file = new FormControl('');
@@ -32,8 +33,8 @@ export class UploadFileComponent {
     let filenames: string[] = [];
 
     // Check if the number of files exceeds 3
-    if (input.files.length > 3) {
-      this.snackbar.open('You can only upload a maximum of 3 files.', 'Ok', {duration: 3000});
+    if (input.files.length > (this.from === 'profile' ? 1 : 3)) {
+      this.snackbar.open(`You can only upload a maximum of ${this.from === 'profile' ? 1 : 3} files.`, 'Ok', { duration: 3000 });
       input.value = ''; // Clear the file input
       return;
     }
@@ -45,12 +46,12 @@ export class UploadFileComponent {
       // Check if file size exceeds the maximum limit
       if (fileSizeMB > this.maxSizeMB) {
         filenames = [];
-        this.snackbar.open(`File size exceeds the maximum limit of ${this.maxSizeMB} MB.`, 'Ok', {duration: 3000});
+        this.snackbar.open(`File size exceeds the maximum limit of ${this.maxSizeMB} MB.`, 'Ok', { duration: 3000 });
         return;
       }
     }
 
-    this.file.setValue(filenames.join(', '));    
+    this.file.setValue(filenames.join(', '));
     this.emitFiles.emit(input.files);
   }
 }
