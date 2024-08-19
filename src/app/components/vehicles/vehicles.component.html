@@ -32,7 +32,7 @@
                 <app-vehicle-table [vehicles]="vehicles?.vehicles" [showActions]="true" (addNewVehicle)="addNewVehicle($event)" (updateTable)="updateTable()"></app-vehicle-table>
             </div>
             <mat-paginator [length]="vehicles?.total" [pageSize]="paginationConfig.limit" [pageIndex]="paginationConfig.page - 1"
-                [pageSizeOptions]="[2, 5, 10, 25, 100]" aria-label="Select page" (page)="handlePageEvent($event)">
+                [pageSizeOptions]="pageSizeOptions" aria-label="Select page" (page)="handlePageEvent($event)">
             </mat-paginator>
         </mat-card>
     </div>

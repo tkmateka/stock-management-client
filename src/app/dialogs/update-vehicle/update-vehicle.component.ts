@@ -71,7 +71,6 @@ export class UpdateVehicleComponent {
     if (vehicleData.accessories) {
       const accessoriesArray = this.newVehicleForm.get('accessories') as FormArray;
       vehicleData.accessories.forEach((accessory: any) => {
-        console.log(accessory)
         accessoriesArray.push(this.fb.group(accessory));
       });
     }

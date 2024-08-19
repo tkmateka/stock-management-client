@@ -17,10 +17,11 @@ export class VehiclesComponent {
   vehicleSub!: Subscription;
   paginationConfig: Pagination = {
     page: 1,
-    limit: 2,
+    limit: 5,
     sort: 'dateCreated',
     order: 'asc'
   }
+  pageSizeOptions:number[] = [5, 10, 25, 100];
 
   orderOptions: string[] = ['asc', 'desc'];
   sortOptions: string[] = ['dateCreated', 'make', 'model', 'modelYear', 'cost', 'millage'];

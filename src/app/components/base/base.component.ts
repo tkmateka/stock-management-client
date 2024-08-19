@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-base',
@@ -26,7 +27,7 @@ export class BaseComponent implements OnInit, OnChanges {
 
   @HostBinding('class') className = '';
 
-  constructor(private router: Router, private api: ApiService) {
+  constructor(private router: Router, private api: ApiService, public token: TokenService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.changeRoute(this.router.url);

@@ -20,12 +20,16 @@
 
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav [mode]="'side'" opened>
-        <div class="flex start-center sidenav-item gap-1em grey" [class.focused-sidenav-item]="INDEX === focusedNavItem"
-            *ngFor="let nav of navItems; let INDEX = index" (click)="changeRoute(nav.url)">
-            <div class="flex column center-center">
-                <span class="material-symbols-outlined">{{nav.icon}}</span>
+        <div class="flex column">
+            <div class="flex start-center sidenav-item gap-1em grey"
+                [class.focused-sidenav-item]="INDEX === focusedNavItem" *ngFor="let nav of navItems; let INDEX = index"
+                (click)="changeRoute(nav.url)">
+                <div class="flex column center-center">
+                    <span class="material-symbols-outlined">{{nav.icon}}</span>
+                </div>
+                <div fxLayout="column" fxFlex="80">{{nav.name}}</div>
             </div>
-            <div fxLayout="column" fxFlex="80">{{nav.name}}</div>
+            <button mat-stroked-button color="warn" class="logout-btn" (click)="token.logout()">Logout</button>
         </div>
     </mat-sidenav>
 
