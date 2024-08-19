@@ -20,6 +20,7 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
 import { ViewVehicleComponent } from './dialogs/view-vehicle/view-vehicle.component';
 import { UpdateVehicleComponent } from './dialogs/update-vehicle/update-vehicle.component';
 import { ConfirmationComponent } from './dialogs/confirmation/confirmation.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ConfirmationComponent } from './dialogs/confirmation/confirmation.compo
     ViewVehicleComponent,
     UpdateVehicleComponent,
     ConfirmationComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

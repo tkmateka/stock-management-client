@@ -4,6 +4,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { BaseComponent } from './components/base/base.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { VehiclesComponent } from './components/vehicles/vehicles.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/base/dashboard', pathMatch: 'full' }, // redirect to `first-component`
@@ -15,7 +16,8 @@ const routes: Routes = [
   {
     path: 'base', component: BaseComponent, children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'vehicles', component: VehiclesComponent }
+      { path: 'vehicles', component: VehiclesComponent },
+      { path: 'profile', component: ProfileComponent }
     ]
   },
   { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page

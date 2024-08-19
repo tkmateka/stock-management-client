@@ -20,6 +20,7 @@ export class BaseComponent implements OnInit, OnChanges {
   navItems: any[] = [
     { name: "Dashboard", icon: 'dashboard', url: '/base/dashboard' },
     { name: "Vehicles", icon: 'garage', url: '/base/vehicles' },
+    { name: "Profile", icon: 'person', url: '/base/profile' },
   ];
 
   searchControl = new FormControl('');
