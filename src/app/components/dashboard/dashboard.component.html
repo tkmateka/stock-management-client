@@ -34,7 +34,7 @@
         <div class="flex column flex-1">
             <mat-card class="padding-20px full-height">
                 <h3 class="no-margin-top">Recently Added Vehicles</h3>
-                <app-vehicle-table [vehicles]="dashboardData.recentVehicles"></app-vehicle-table>
+                <app-vehicle-table [vehicles]="dashboardData.recentVehicles" (updateTable)="updateTable()"></app-vehicle-table>
             </mat-card>
         </div>
     </div>

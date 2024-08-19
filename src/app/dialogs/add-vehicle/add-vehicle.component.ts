@@ -111,9 +111,6 @@ export class AddVehicleComponent implements OnDestroy {
     this.uploadSub = this.api.post('/upload', formData).subscribe({
       next: (res: any) => {
         for (const file of res['file']) {
-
-          console.log(file)
-
           this.addImage({
             name: file.originalname,
             path: `${this.serverUrl}/file/${file.filename}`,

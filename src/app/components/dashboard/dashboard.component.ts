@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -12,7 +12,7 @@ interface ChartData {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnDestroy {
   userInfo: any = null;
   dashboardData$!: Observable<any>;
   dashboardSub!: Subscription;
@@ -23,20 +23,27 @@ export class DashboardComponent {
 
   constructor(private api: ApiService) {
     this.userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-    // Directly assign the observable returned by the API to the property
-    this.dashboardData$ = this.getDashboardData();
+    this.updateTable();
 
     // Remove after testing
     this.dashboardSub = this.dashboardData$.subscribe((data:any) => {
       data.previousYearsData.forEach((year:any) => {
         this.previousYears.labels.push(year.year);
         this.previousYears.data.push(year.carsAdded);
-        this.dashboardSub.unsubscribe();
       });
     })
   }
 
+  updateTable() {
+    // Directly assign the observable returned by the API to the property
+    this.dashboardData$ = this.getDashboardData();
+  }
+
   getDashboardData(): Observable<any> {
     return this.api.get('/get_dashboard_data');
+  }
+
+  ngOnDestroy() {
+    this.dashboardSub?.unsubscribe();
   }
 }
