@@ -37,7 +37,11 @@ export class ProfileComponent {
 
           // Update User Info
           this.token.setItem('userInfo', this.userInfo);
-          this.api.put('/update_employee', user);
+          this.uploadSub = this.api.put('/update_employee', user)
+            .subscribe({
+              next: (res) => console.log(res),
+              error: (err) => console.log(err)
+            });
         }
         this.loader.hide();
       }
@@ -45,5 +49,9 @@ export class ProfileComponent {
       this.loader.hide();
       console.log(error);
     }
+  }
+
+  ngOnDetroy() {
+    this.uploadSub.unsubscribe();
   }
 }

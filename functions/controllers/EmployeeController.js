@@ -45,6 +45,8 @@ module.exports = {
 
         const update = req.body;
 
+        console.log(update);
+
         const employee = await Employee.findOneAndUpdate(filter, update);
         res.json(employee);
     }
