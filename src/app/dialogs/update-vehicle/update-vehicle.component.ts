@@ -1,11 +1,11 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { Accessory } from 'src/app/interfaces/Accessory';
 import { Image } from 'src/app/interfaces/Image';
-import { ApiService } from 'src/app/services/api.service';
+import { FileUploadsService } from 'src/app/services/file-uploads.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -16,8 +16,6 @@ import { environment } from 'src/environments/environment';
 export class UpdateVehicleComponent {
   newVehicleForm;
   serverUrl: string = environment.serverUrl;
-
-  uploadSub!: Subscription;
 
   newFiles: any[] = [];
 
@@ -32,24 +30,23 @@ export class UpdateVehicleComponent {
 
   constructor(
     public dialogRef: MatDialogRef<UpdateVehicleComponent>, private fb: FormBuilder,
-    private api: ApiService, private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private snackbar: MatSnackBar, private loader: LoaderService,
+    @Inject(MAT_DIALOG_DATA) public data: any, private upload: FileUploadsService,
   ) {
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
       make: ['', Validators.required],
       model: ['', Validators.required],
-      modelYear: [new Date().getFullYear(), [Validators.required, Validators.min(1900)]],  // Ensure valid year
-      millage: [null, [Validators.required, Validators.min(0)]],  // Positive millage
+      modelYear: [new Date().getFullYear(), [Validators.required, Validators.min(1900)]], 
+      millage: [null, [Validators.required, Validators.min(0)]],
       colour: ['', Validators.required],
       vin: ['', [Validators.required, Validators.minLength(5)]],
-      retailPrice: [null, [Validators.required, Validators.min(0)]],  // Ensure valid price
-      costPrice: [null, [Validators.required, Validators.min(0)]],  // Ensure valid price
-      accessories: this.fb.array([]),  // Initialize empty FormArray for accessories
-      images: this.fb.array([])  // Initialize empty FormArray for images
+      retailPrice: [null, [Validators.required, Validators.min(0)]], 
+      costPrice: [null, [Validators.required, Validators.min(0)]],
+      accessories: this.fb.array([]),  
+      images: this.fb.array([]) 
     });
 
-    // Initialize the form with some data (could come from an API)
     this.populateFormWithVehicleData(data);
   }
 
@@ -110,15 +107,18 @@ export class UpdateVehicleComponent {
   }
 
   // Remove image
-  removeImage(image: Image, index: number): void {
-    this.api.delete(`/file/${image['_id']}`)
-      .subscribe({
-        next: (response: any) => {
-          this.images.removeAt(index);
-          this.snackbar.open(response.message, 'Ok', { duration: 3000 })
-        },
-        error: (err: any) => console.log(err)
-      })
+  async removeImage(image: Image, index: number) {
+    this.loader.show();
+    try {
+      const response = await this.upload.deleteFileStorage(`/vehicles`, image.name);
+
+      this.images.removeAt(index);
+      this.snackbar.open('Image deleted successfully', 'Ok', { duration: 3000 })
+      this.loader.hide();
+    } catch (error) {
+      this.loader.hide();
+      console.log(error)
+    }
   }
 
   // Child Date Picker
@@ -127,7 +127,7 @@ export class UpdateVehicleComponent {
   }
 
   // File Upload
-  getFileDetails(files: FileList) {
+  async getFileDetails(files: FileList) {
     this.newFiles = Array.from(files);
     this.newFiles = this.filterExtraImages(this.newFiles);
 
@@ -136,25 +136,18 @@ export class UpdateVehicleComponent {
       return;
     }
 
-    const formData: FormData = new FormData();
+    this.loader.show();
+    try {
+      const response = await this.upload.uploadFiles(`/vehicles/${new Date().getTime()}`, files)
 
-    // Loop through the FileList and append each file to FormData
-    for (let i = 0; i < this.newFiles.length; i++) {
-      formData.append('files', this.newFiles[i], this.newFiles[i].name);
+      for (const file of response) {
+        this.addImage(file);
+      }
+      this.loader.hide();
+    } catch (error) {
+      this.loader.hide();
+      console.log(error)
     }
-
-    this.uploadSub = this.api.post('/upload', formData).subscribe({
-      next: (res: any) => {
-        for (const file of res['file']) {
-          this.addImage({
-            name: file.originalname,
-            path: `${this.serverUrl}/file/${file.filename}`,
-            _id: file['_id']
-          });
-        }
-      },
-      error: err => console.log(err),
-    })
   }
 
   filterExtraImages(newImages: any) {
@@ -187,11 +180,5 @@ export class UpdateVehicleComponent {
     });
 
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    if (this.uploadSub) {
-      this.uploadSub.unsubscribe();
-    }
   }
 }

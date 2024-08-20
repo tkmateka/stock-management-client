@@ -1,6 +1,8 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { FileUploadsService } from 'src/app/services/file-uploads.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { TokenService } from 'src/app/services/token.service';
 import { environment } from 'src/environments/environment';
 
@@ -9,48 +11,47 @@ import { environment } from 'src/environments/environment';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnDestroy {
+export class ProfileComponent {
   serverUrl: string = environment.serverUrl;
   uploadSub!: Subscription;
   imagePlaceholder: string = '../../../assets/illustrations/user.svg';
   userInfo;
 
-  constructor(private api: ApiService, private token: TokenService) {
+  constructor(private api: ApiService, private upload: FileUploadsService, private token: TokenService, private loader: LoaderService) {
     this.userInfo = token.getItem('userInfo');
   }
 
-  updateImage(files: any) {
-    const formData: FormData = new FormData();
+  async updateImage(files: FileList) {
+    this.loader.show();
 
-    formData.append('files', files[0], files[0].name);
+    try {
+      const response = await this.upload.uploadFiles(`/profile-pictures/${this.userInfo.email}`, files)
 
-    this.uploadSub = this.api.post('/upload', formData).subscribe({
-      next: (res: any) => {
-        if(res) {
-          for (const file of res['file']) {
-            this.userInfo['image'] = {
-              name: file.originalname,
-              path: `${this.serverUrl}/file/${file.filename}`,
-              _id: file['_id']
-            };
-  
-            let user = {...this.userInfo};
-            delete user['_id'];
-            delete user['__v'];
-  
-            // Update User Info
-            this.token.setItem('userInfo', this.userInfo);
-            this.api.put('/update_employee', user);
-          }
+      if (response) {
+        for (const file of response) {
+          this.userInfo['image'] = file;
+
+          let user = { ...this.userInfo };
+          delete user['_id'];
+          delete user['__v'];
+
+          // Update User Info
+          this.token.setItem('userInfo', this.userInfo);
+          this.uploadSub = this.api.put('/update_employee', user)
+            .subscribe({
+              next: (res) => console.log(res),
+              error: (err) => console.log(err)
+            });
         }
-      },
-      error: err => console.log(err),
-    })
+        this.loader.hide();
+      }
+    } catch (error) {
+      this.loader.hide();
+      console.log(error);
+    }
   }
 
-  ngOnDestroy() {
-    if (this.uploadSub) {
-      this.uploadSub.unsubscribe();
-    }
+  ngOnDetroy() {
+    this.uploadSub.unsubscribe();
   }
 }

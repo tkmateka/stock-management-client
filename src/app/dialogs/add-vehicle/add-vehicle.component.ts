@@ -1,11 +1,12 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { Accessory } from 'src/app/interfaces/Accessory';
 import { Image } from 'src/app/interfaces/Image';
-import { ApiService } from 'src/app/services/api.service';
+import { FileUploadsService } from 'src/app/services/file-uploads.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { TokenService } from 'src/app/services/token.service';
 import { environment } from 'src/environments/environment';
 
 
@@ -14,13 +15,12 @@ import { environment } from 'src/environments/environment';
   templateUrl: './add-vehicle.component.html',
   styleUrls: ['./add-vehicle.component.scss']
 })
-export class AddVehicleComponent implements OnDestroy {
+export class AddVehicleComponent {
   newVehicleForm;
-  serverUrl: string = environment.serverUrl;
-
-  uploadSub!: Subscription;
-
   newFiles: any[] = [];
+  userInfo;
+
+  serverUrl: string = environment.serverUrl;
 
   // FormControl to bind the selected year
   yearControl = new FormControl();
@@ -32,8 +32,11 @@ export class AddVehicleComponent implements OnDestroy {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder,
-    private api: ApiService, private snackbar: MatSnackBar) {
+    public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder, private token: TokenService,
+    private snackbar: MatSnackBar, private upload: FileUploadsService, private loader: LoaderService,
+  ) {
+    this.userInfo = token.getItem('userInfo');
+
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
       make: ['', Validators.required],
@@ -75,15 +78,18 @@ export class AddVehicleComponent implements OnDestroy {
   }
 
   // Remove image
-  removeImage(image: Image, index: number): void {
-    this.api.delete(`/file/${image['_id']}`)
-      .subscribe({
-        next: (response: any) => {
-          this.images.removeAt(index);
-          this.snackbar.open(response.message, 'Ok', { duration: 3000 })
-        },
-        error: (err: any) => console.log(err)
-      })
+  async removeImage(image: Image, index: number) {
+    this.loader.show();
+    try {
+      const response = await this.upload.deleteFileStorage(`/vehicles`, image.name);
+
+      this.images.removeAt(index);
+      this.snackbar.open('Image deleted successfully', 'Ok', { duration: 3000 })
+      this.loader.hide();
+    } catch (error) {
+      this.loader.hide();
+      console.log(error)
+    }
   }
 
   // Child Date Picker
@@ -92,7 +98,7 @@ export class AddVehicleComponent implements OnDestroy {
   }
 
   // File Upload
-  getFileDetails(files: FileList) {
+  async getFileDetails(files: FileList) {
     this.newFiles = Array.from(files);
     this.newFiles = this.filterExtraImages(this.newFiles);
 
@@ -101,25 +107,18 @@ export class AddVehicleComponent implements OnDestroy {
       return;
     }
 
-    const formData: FormData = new FormData();
+    this.loader.show();
+    try {
+      const response = await this.upload.uploadFiles(`/vehicles`, files)
 
-    // Loop through the FileList and append each file to FormData
-    for (let i = 0; i < this.newFiles.length; i++) {
-      formData.append('files', this.newFiles[i], this.newFiles[i].name);
+      for (const file of response) {
+        this.addImage(file);
+      }
+      this.loader.hide();
+    } catch (error) {
+      this.loader.hide();
+      console.log(error)
     }
-
-    this.uploadSub = this.api.post('/upload', formData).subscribe({
-      next: (res: any) => {
-        for (const file of res['file']) {
-          this.addImage({
-            name: file.originalname,
-            path: `${this.serverUrl}/file/${file.filename}`,
-            _id: file['id']
-          });
-        }
-      },
-      error: err => console.log(err),
-    })
   }
 
   filterExtraImages(newImages: any) {
@@ -151,11 +150,5 @@ export class AddVehicleComponent implements OnDestroy {
     });
 
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    if (this.uploadSub) {
-      this.uploadSub.unsubscribe();
-    }
   }
 }

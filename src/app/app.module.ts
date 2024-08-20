@@ -22,6 +22,12 @@ import { UpdateVehicleComponent } from './dialogs/update-vehicle/update-vehicle.
 import { ConfirmationComponent } from './dialogs/confirmation/confirmation.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { environment } from 'src/environments/environment';
+import { LoaderComponent } from './components/loader/loader.component';
+import { LoadingInterceptor } from './services/interceptors/loading.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +44,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     UpdateVehicleComponent,
     ConfirmationComponent,
     ProfileComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,10 +52,13 @@ import { ProfileComponent } from './components/profile/profile.component';
     MaterialModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    NgChartsModule
+    NgChartsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
