@@ -35,7 +35,6 @@ export class VehicleTableComponent implements OnChanges, OnDestroy {
   dataSource!: MatTableDataSource<Vehicle[]>;
 
   updateSub!: Subscription;
-  deleteSub!: Subscription;
 
   constructor(public dialog: MatDialog, private api: ApiService) { }
 
@@ -109,6 +108,5 @@ export class VehicleTableComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.updateSub?.unsubscribe();
-    this.deleteSub?.unsubscribe();
   }
 }

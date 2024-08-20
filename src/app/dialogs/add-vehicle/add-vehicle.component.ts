@@ -1,12 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormArray, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 import { Accessory } from 'src/app/interfaces/Accessory';
 import { Image } from 'src/app/interfaces/Image';
-import { ApiService } from 'src/app/services/api.service';
 import { FileUploadsService } from 'src/app/services/file-uploads.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { TokenService } from 'src/app/services/token.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,14 +15,13 @@ import { environment } from 'src/environments/environment';
   templateUrl: './add-vehicle.component.html',
   styleUrls: ['./add-vehicle.component.scss']
 })
-export class AddVehicleComponent implements OnDestroy {
+export class AddVehicleComponent {
   newVehicleForm;
   newFiles: any[] = [];
   userInfo;
 
   serverUrl: string = environment.serverUrl;
 
-  uploadSub!: Subscription;
   // FormControl to bind the selected year
   yearControl = new FormControl();
 
@@ -35,7 +33,7 @@ export class AddVehicleComponent implements OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<AddVehicleComponent>, private fb: FormBuilder, private token: TokenService,
-    private api: ApiService, private snackbar: MatSnackBar, private upload: FileUploadsService
+    private snackbar: MatSnackBar, private upload: FileUploadsService, private loader: LoaderService,
   ) {
     this.userInfo = token.getItem('userInfo');
 
@@ -81,12 +79,15 @@ export class AddVehicleComponent implements OnDestroy {
 
   // Remove image
   async removeImage(image: Image, index: number) {
+    this.loader.show();
     try {
       const response = await this.upload.deleteFileStorage(`/vehicles`, image.name);
 
       this.images.removeAt(index);
       this.snackbar.open('Image deleted successfully', 'Ok', { duration: 3000 })
+      this.loader.hide();
     } catch (error) {
+      this.loader.hide();
       console.log(error)
     }
   }
@@ -106,13 +107,16 @@ export class AddVehicleComponent implements OnDestroy {
       return;
     }
 
+    this.loader.show();
     try {
       const response = await this.upload.uploadFiles(`/vehicles`, files)
 
       for (const file of response) {
         this.addImage(file);
       }
+      this.loader.hide();
     } catch (error) {
+      this.loader.hide();
       console.log(error)
     }
   }
@@ -146,11 +150,5 @@ export class AddVehicleComponent implements OnDestroy {
     });
 
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    if (this.uploadSub) {
-      this.uploadSub.unsubscribe();
-    }
   }
 }

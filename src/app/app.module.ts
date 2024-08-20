@@ -25,6 +25,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from 'src/environments/environment';
+import { LoaderComponent } from './components/loader/loader.component';
+import { LoadingInterceptor } from './services/interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { environment } from 'src/environments/environment';
     UpdateVehicleComponent,
     ConfirmationComponent,
     ProfileComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,7 @@ import { environment } from 'src/environments/environment';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
