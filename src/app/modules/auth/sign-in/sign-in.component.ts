@@ -50,7 +50,7 @@ export class SignInComponent implements OnDestroy {
         next: (res: any) => {
           if (res) {
             sessionStorage.setItem('userInfo', JSON.stringify(res[0]));
-            this.router.navigate(['base']);
+            this.router.navigate(['base/dashboard']);
           }
         },
         error: err => this.snackBar.open(err.error, 'Ok', { duration: 3000 })
