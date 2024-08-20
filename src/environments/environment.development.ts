@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    serverUrl: 'http://localhost:3000/api',
+    serverUrl: 'http://localhost:5000/stockxpert-7fdcb/us-central1/api',
     firebase: {
         apiKey: "AIzaSyCdmGUWETOroyHI-EDVsJq4aboz8h8znxU",
         authDomain: "stockxpert-7fdcb.firebaseapp.com",
