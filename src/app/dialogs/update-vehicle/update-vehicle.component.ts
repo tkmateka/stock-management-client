@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Accessory } from 'src/app/interfaces/Accessory';
 import { Image } from 'src/app/interfaces/Image';
 import { ApiService } from 'src/app/services/api.service';
+import { FileUploadsService } from 'src/app/services/file-uploads.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -33,7 +34,7 @@ export class UpdateVehicleComponent {
   constructor(
     public dialogRef: MatDialogRef<UpdateVehicleComponent>, private fb: FormBuilder,
     private api: ApiService, private snackbar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any, private upload: FileUploadsService,
   ) {
     this.newVehicleForm = this.fb.group({
       regNo: ['', Validators.required],
@@ -110,15 +111,15 @@ export class UpdateVehicleComponent {
   }
 
   // Remove image
-  removeImage(image: Image, index: number): void {
-    this.api.delete(`/file/${image['_id']}`)
-      .subscribe({
-        next: (response: any) => {
-          this.images.removeAt(index);
-          this.snackbar.open(response.message, 'Ok', { duration: 3000 })
-        },
-        error: (err: any) => console.log(err)
-      })
+  async removeImage(image: Image, index: number) {
+    try {
+      const response = await this.upload.deleteFileStorage(`/vehicles`, image.name);
+
+      this.images.removeAt(index);
+      this.snackbar.open('Image deleted successfully', 'Ok', { duration: 3000 })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Child Date Picker
@@ -127,7 +128,7 @@ export class UpdateVehicleComponent {
   }
 
   // File Upload
-  getFileDetails(files: FileList) {
+  async getFileDetails(files: FileList) {
     this.newFiles = Array.from(files);
     this.newFiles = this.filterExtraImages(this.newFiles);
 
@@ -136,25 +137,15 @@ export class UpdateVehicleComponent {
       return;
     }
 
-    const formData: FormData = new FormData();
+    try {
+      const response = await this.upload.uploadFiles(`/vehicles/${new Date().getTime()}`, files)
 
-    // Loop through the FileList and append each file to FormData
-    for (let i = 0; i < this.newFiles.length; i++) {
-      formData.append('files', this.newFiles[i], this.newFiles[i].name);
+      for (const file of response) {
+        this.addImage(file);
+      }
+    } catch (error) {
+      console.log(error)
     }
-
-    this.uploadSub = this.api.post('/upload', formData).subscribe({
-      next: (res: any) => {
-        for (const file of res['file']) {
-          this.addImage({
-            name: file.originalname,
-            path: `${this.serverUrl}/file/${file.filename}`,
-            _id: file['_id']
-          });
-        }
-      },
-      error: err => console.log(err),
-    })
   }
 
   filterExtraImages(newImages: any) {

@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { FileUploadsService } from 'src/app/services/file-uploads.service';
 import { TokenService } from 'src/app/services/token.service';
 import { environment } from 'src/environments/environment';
 
@@ -15,37 +16,30 @@ export class ProfileComponent implements OnDestroy {
   imagePlaceholder: string = '../../../assets/illustrations/user.svg';
   userInfo;
 
-  constructor(private api: ApiService, private token: TokenService) {
+  constructor(private api: ApiService, private upload: FileUploadsService, private token: TokenService) {
     this.userInfo = token.getItem('userInfo');
   }
 
-  updateImage(files: any) {
-    const formData: FormData = new FormData();
+  async updateImage(files: FileList) {
+    try {
+      const response = await this.upload.uploadFiles(`/profile-pictures/${this.userInfo.email}`, files)
 
-    formData.append('files', files[0], files[0].name);
+      if (response) {
+        for (const file of response) {
+          this.userInfo['image'] = file;
 
-    this.uploadSub = this.api.post('/upload', formData).subscribe({
-      next: (res: any) => {
-        if(res) {
-          for (const file of res['file']) {
-            this.userInfo['image'] = {
-              name: file.originalname,
-              path: `${this.serverUrl}/file/${file.filename}`,
-              _id: file['_id']
-            };
-  
-            let user = {...this.userInfo};
-            delete user['_id'];
-            delete user['__v'];
-  
-            // Update User Info
-            this.token.setItem('userInfo', this.userInfo);
-            this.api.put('/update_employee', user);
-          }
+          let user = { ...this.userInfo };
+          delete user['_id'];
+          delete user['__v'];
+
+          // Update User Info
+          this.token.setItem('userInfo', this.userInfo);
+          this.api.put('/update_employee', user);
         }
-      },
-      error: err => console.log(err),
-    })
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   ngOnDestroy() {

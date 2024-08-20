@@ -12,7 +12,6 @@ const routes = require('./routes/routes');
 app.use(routes);
 
 app.get('/', (req, res) => {
-    console.log('App is running...')
     res.send({ message: 'Test: This works...' })
 })
 
